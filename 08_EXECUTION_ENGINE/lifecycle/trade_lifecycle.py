@@ -22,7 +22,7 @@ from core.event_contract import (
 )
 from core.state_machine import (
     InvalidStateTransition,
-    LunaState,
+    ExecutionState,
     StateEntityType,
     StateMachine,
 )
@@ -51,8 +51,8 @@ class TradeLifecycleResult:
     """
 
     trade_id: str
-    previous_state: LunaState
-    current_state: LunaState
+    previous_state: ExecutionState
+    current_state: ExecutionState
     event_id: str
     success: bool
     message: str
@@ -60,7 +60,7 @@ class TradeLifecycleResult:
 
 class TradeLifecycle:
     """
-    Atomic local lifecycle coordinator for one LUNA trade.
+    Atomic local lifecycle coordinator for one AURORA trade.
 
     Architectural separation:
 
@@ -68,7 +68,7 @@ class TradeLifecycle:
         Represents the operational trade/order status.
 
     StateMachine.current_state
-        Represents the broader LUNA lifecycle state, including
+        Represents the broader AURORA lifecycle state, including
         validation, risk, human approval and execution stages.
 
     These two state systems are intentionally NOT one-to-one.
@@ -77,7 +77,7 @@ class TradeLifecycle:
 
         TradeStatus.CREATED
         +
-        LunaState.RISK_CHECK
+        ExecutionState.RISK_CHECK
 
     is valid because risk checking is a lifecycle stage performed
     before the operational TradeStatus changes.
@@ -93,128 +93,128 @@ class TradeLifecycle:
     """
 
     _STATE_STATUS_COMPATIBILITY: dict[
-        LunaState,
+        ExecutionState,
         frozenset[TradeStatus],
     ] = {
-        LunaState.CREATED: frozenset(
+        ExecutionState.CREATED: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.WAITING: frozenset(
+        ExecutionState.WAITING: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.CANDIDATE: frozenset(
+        ExecutionState.CANDIDATE: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.VALIDATED: frozenset(
+        ExecutionState.VALIDATED: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.ANALYZING: frozenset(
+        ExecutionState.ANALYZING: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.REVIEW: frozenset(
+        ExecutionState.REVIEW: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.RISK_CHECK: frozenset(
+        ExecutionState.RISK_CHECK: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.RISK_APPROVED: frozenset(
+        ExecutionState.RISK_APPROVED: frozenset(
             {
                 TradeStatus.CREATED,
             }
         ),
-        LunaState.RISK_REJECTED: frozenset(
-            {
-                TradeStatus.CREATED,
-                TradeStatus.REJECTED,
-            }
-        ),
-        LunaState.HUMAN_APPROVAL: frozenset(
-            {
-                TradeStatus.CREATED,
-            }
-        ),
-        LunaState.HUMAN_APPROVED: frozenset(
-            {
-                TradeStatus.CREATED,
-            }
-        ),
-        LunaState.HUMAN_REJECTED: frozenset(
+        ExecutionState.RISK_REJECTED: frozenset(
             {
                 TradeStatus.CREATED,
                 TradeStatus.REJECTED,
             }
         ),
-        LunaState.APPROVED: frozenset(
+        ExecutionState.HUMAN_APPROVAL: frozenset(
+            {
+                TradeStatus.CREATED,
+            }
+        ),
+        ExecutionState.HUMAN_APPROVED: frozenset(
+            {
+                TradeStatus.CREATED,
+            }
+        ),
+        ExecutionState.HUMAN_REJECTED: frozenset(
+            {
+                TradeStatus.CREATED,
+                TradeStatus.REJECTED,
+            }
+        ),
+        ExecutionState.APPROVED: frozenset(
             {
                 TradeStatus.APPROVED,
             }
         ),
-        LunaState.SUBMITTED: frozenset(
+        ExecutionState.SUBMITTED: frozenset(
             {
                 TradeStatus.SUBMITTED,
             }
         ),
-        LunaState.PARTIALLY_FILLED: frozenset(
+        ExecutionState.PARTIALLY_FILLED: frozenset(
             {
                 TradeStatus.PARTIALLY_FILLED,
             }
         ),
-        LunaState.FILLED: frozenset(
+        ExecutionState.FILLED: frozenset(
             {
                 TradeStatus.FILLED,
             }
         ),
-        LunaState.OPEN: frozenset(
+        ExecutionState.OPEN: frozenset(
             {
                 TradeStatus.FILLED,
             }
         ),
-        LunaState.MANAGED: frozenset(
+        ExecutionState.MANAGED: frozenset(
             {
                 TradeStatus.FILLED,
             }
         ),
-        LunaState.CLOSED: frozenset(
+        ExecutionState.CLOSED: frozenset(
             {
                 TradeStatus.CLOSED,
             }
         ),
-        LunaState.CANCELLED: frozenset(
+        ExecutionState.CANCELLED: frozenset(
             {
                 TradeStatus.CANCELLED,
             }
         ),
-        LunaState.REJECTED: frozenset(
+        ExecutionState.REJECTED: frozenset(
             {
                 TradeStatus.REJECTED,
             }
         ),
-        LunaState.FAILED: frozenset(
+        ExecutionState.FAILED: frozenset(
             {
                 TradeStatus.REJECTED,
             }
         ),
-        LunaState.EMERGENCY_STOP: frozenset(
+        ExecutionState.EMERGENCY_STOP: frozenset(
             {
                 TradeStatus.FILLED,
                 TradeStatus.CLOSED,
             }
         ),
-        LunaState.SAFE_MODE: frozenset(
+        ExecutionState.SAFE_MODE: frozenset(
             {
                 TradeStatus.CREATED,
                 TradeStatus.APPROVED,
@@ -231,7 +231,7 @@ class TradeLifecycle:
         event_bus: InMemoryEventBus,
         *,
         state_machine: StateMachine | None = None,
-        producer_instance: str = "LUNA_TRADE_LIFECYCLE",
+        producer_instance: str = "AURORA_TRADE_LIFECYCLE",
         execution_policy_engine: ExecutionPolicyEngine | None = None,
     ) -> None:
         if not isinstance(trade, TradeContract):
@@ -307,18 +307,18 @@ class TradeLifecycle:
 
         mapping: dict[
             TradeStatus,
-            LunaState,
+            ExecutionState,
         ] = {
-            TradeStatus.CREATED: LunaState.CREATED,
-            TradeStatus.APPROVED: LunaState.APPROVED,
-            TradeStatus.SUBMITTED: LunaState.SUBMITTED,
+            TradeStatus.CREATED: ExecutionState.CREATED,
+            TradeStatus.APPROVED: ExecutionState.APPROVED,
+            TradeStatus.SUBMITTED: ExecutionState.SUBMITTED,
             TradeStatus.PARTIALLY_FILLED: (
-                LunaState.PARTIALLY_FILLED
+                ExecutionState.PARTIALLY_FILLED
             ),
-            TradeStatus.FILLED: LunaState.FILLED,
-            TradeStatus.REJECTED: LunaState.REJECTED,
-            TradeStatus.CANCELLED: LunaState.CANCELLED,
-            TradeStatus.CLOSED: LunaState.CLOSED,
+            TradeStatus.FILLED: ExecutionState.FILLED,
+            TradeStatus.REJECTED: ExecutionState.REJECTED,
+            TradeStatus.CANCELLED: ExecutionState.CANCELLED,
+            TradeStatus.CLOSED: ExecutionState.CLOSED,
         }
 
         try:
@@ -337,12 +337,12 @@ class TradeLifecycle:
         )
 
     @property
-    def current_state(self) -> LunaState:
+    def current_state(self) -> ExecutionState:
         return self.state_machine.current_state
 
     def _assert_consistent_state(self) -> None:
         """
-        Validate compatibility between TradeStatus and LunaState.
+        Validate compatibility between TradeStatus and ExecutionState.
 
         This is compatibility validation, not equality validation.
         """
@@ -386,19 +386,19 @@ class TradeLifecycle:
 
     def _snapshot_state_machine(
         self,
-    ) -> tuple[LunaState, tuple[Any, ...]]:
+    ) -> tuple[ExecutionState, tuple[Any, ...]]:
         return self.state_machine.transaction_snapshot()
 
     def _restore_state_machine(
         self,
-        snapshot: tuple[LunaState, tuple[Any, ...]],
+        snapshot: tuple[ExecutionState, tuple[Any, ...]],
     ) -> None:
         self.state_machine.restore_transaction_snapshot(snapshot)
 
     def _restore_trade_and_state(
         self,
         trade_snapshot: dict[str, Any],
-        state_snapshot: tuple[LunaState, tuple[Any, ...]],
+        state_snapshot: tuple[ExecutionState, tuple[Any, ...]],
     ) -> None:
         self._restore_trade(trade_snapshot)
         self._restore_state_machine(state_snapshot)
@@ -442,8 +442,8 @@ class TradeLifecycle:
         self,
         event_type: EventType,
         *,
-        previous_state: LunaState,
-        current_state: LunaState,
+        previous_state: ExecutionState,
+        current_state: ExecutionState,
         reason: str,
         severity: EventSeverity = EventSeverity.INFO,
         extra_payload: dict[str, Any] | None = None,
@@ -488,7 +488,7 @@ class TradeLifecycle:
 
     def _commit(
         self,
-        next_state: LunaState,
+        next_state: ExecutionState,
         reason: str,
         *,
         event_type: EventType,
@@ -529,10 +529,10 @@ class TradeLifecycle:
 
             if not isinstance(
                 next_state,
-                LunaState,
+                ExecutionState,
             ):
                 raise TradeLifecycleValidationError(
-                    "next_state must be a LunaState"
+                    "next_state must be a ExecutionState"
                 )
 
             if (
@@ -613,7 +613,7 @@ class TradeLifecycle:
             )
 
         return self._commit(
-            LunaState.RISK_CHECK,
+            ExecutionState.RISK_CHECK,
             reason,
             event_type=EventType.RISK_CHECKED,
         )
@@ -627,7 +627,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.RISK_APPROVED,
+            ExecutionState.RISK_APPROVED,
             reason,
             event_type=EventType.RISK_APPROVED,
         )
@@ -646,7 +646,7 @@ class TradeLifecycle:
             )
 
         return self._commit(
-            LunaState.RISK_REJECTED,
+            ExecutionState.RISK_REJECTED,
             reason,
             event_type=EventType.RISK_REJECTED,
             trade_mutator=reject_trade,
@@ -661,7 +661,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.HUMAN_APPROVAL,
+            ExecutionState.HUMAN_APPROVAL,
             reason,
             event_type=EventType.DECISION_CREATED,
         )
@@ -675,7 +675,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.HUMAN_APPROVED,
+            ExecutionState.HUMAN_APPROVED,
             reason,
             event_type=EventType.DECISION_APPROVED,
         )
@@ -694,7 +694,7 @@ class TradeLifecycle:
             )
 
         return self._commit(
-            LunaState.HUMAN_REJECTED,
+            ExecutionState.HUMAN_REJECTED,
             reason,
             event_type=EventType.DECISION_REJECTED,
             trade_mutator=reject_trade,
@@ -711,7 +711,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.APPROVED,
+            ExecutionState.APPROVED,
             reason,
             event_type=EventType.DECISION_APPROVED,
             trade_mutator=self.trade.approve,
@@ -756,7 +756,7 @@ class TradeLifecycle:
             )
 
         return self._commit(
-            LunaState.SUBMITTED,
+            ExecutionState.SUBMITTED,
             reason,
             event_type=EventType.ORDER_SUBMITTED,
             trade_mutator=submit_trade,
@@ -782,7 +782,7 @@ class TradeLifecycle:
             )
 
         return self._commit(
-            LunaState.FILLED,
+            ExecutionState.FILLED,
             reason,
             event_type=EventType.ORDER_FILLED,
             trade_mutator=fill_trade,
@@ -800,7 +800,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.OPEN,
+            ExecutionState.OPEN,
             reason,
             event_type=EventType.POSITION_OPENED,
         )
@@ -814,7 +814,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.MANAGED,
+            ExecutionState.MANAGED,
             reason,
             event_type=EventType.POSITION_UPDATED,
         )
@@ -828,7 +828,7 @@ class TradeLifecycle:
         """
 
         return self._commit(
-            LunaState.EMERGENCY_STOP,
+            ExecutionState.EMERGENCY_STOP,
             reason,
             event_type=EventType.EMERGENCY_STOP,
             severity=EventSeverity.CRITICAL,
@@ -856,7 +856,7 @@ class TradeLifecycle:
                 )
 
         return self._commit(
-            LunaState.CLOSED,
+            ExecutionState.CLOSED,
             reason,
             event_type=EventType.POSITION_CLOSED,
             trade_mutator=close_trade,

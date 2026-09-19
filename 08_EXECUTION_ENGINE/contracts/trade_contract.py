@@ -32,7 +32,7 @@ class TradeStatus(str, Enum):
 @dataclass
 class TradeContract:
     """
-    Canonical trade-domain contract for LUNA.
+    Canonical trade-domain contract for AURORA.
 
     Lifecycle:
 
