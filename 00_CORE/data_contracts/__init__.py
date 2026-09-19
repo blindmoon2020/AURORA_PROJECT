@@ -1,5 +1,5 @@
 """
-LIDOMA Data Contracts Public API.
+AURORA Data Contracts Public API.
 """
 
 from .market_price import (

@@ -7,7 +7,7 @@ from uuid import UUID, uuid4
 @dataclass(frozen=True)
 class DomainEvent:
     """
-    Base class for all LIDOMA domain events.
+    Base class for all AURORA domain events.
 
     Domain events represent facts that
     already happened inside the domain.

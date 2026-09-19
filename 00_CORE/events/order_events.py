@@ -10,7 +10,7 @@ from ..models.entities import Order
 class OrderCreatedEvent(DomainEvent):
     """
     Event emitted when a new order
-    is created inside LIDOMA domain.
+    is created inside AURORA domain.
 
     Used for:
 

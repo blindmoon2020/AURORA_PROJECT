@@ -1,5 +1,5 @@
 """
-LIDOMA Event Versioning Public API.
+AURORA Event Versioning Public API.
 """
 
 from .event_schema import (
