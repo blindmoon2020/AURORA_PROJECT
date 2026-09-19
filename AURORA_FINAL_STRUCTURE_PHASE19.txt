@@ -1,0 +1,1964 @@
+Folder PATH listing
+Volume serial number is 9086-A5D3
+F:.
+³   AURORA_FINAL_STRUCTURE_PHASE19.txt
+³   FINAL_AURORA_LEGACY_ZERO_CHECK.txt
+³   FINAL_AURORA_LIDOMA_ZERO_CHECK.txt
+³   FINAL_AURORA_LUNA_ZERO_CHECK.txt
+³   
+ÃÄÄÄ00_CORE
+³   ³   __init__.py
+³   ³   
+³   ÃÄÄÄapplication
+³   ³   ³   portfolio_application_service.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           portfolio_application_service.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄcontracts
+³   ³   ³   event_contract.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           event_contract.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄdata_contracts
+³   ³   ³   candle.py
+³   ³   ³   corporate_action.py
+³   ³   ³   funding.py
+³   ³   ³   market_price.py
+³   ³   ³   orderbook.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           candle.cpython-313.pyc
+³   ³           corporate_action.cpython-313.pyc
+³   ³           funding.cpython-313.pyc
+³   ³           market_price.cpython-313.pyc
+³   ³           orderbook.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄevents
+³   ³   ³   base.py
+³   ³   ³   execution_events.py
+³   ³   ³   fill_events.py
+³   ³   ³   idempotency.py
+³   ³   ³   order_events.py
+³   ³   ³   outbox.py
+³   ³   ³   portfolio_events.py
+³   ³   ³   
+³   ³   ÃÄÄÄversioning
+³   ³   ³   ³   compatibility.py
+³   ³   ³   ³   event_schema.py
+³   ³   ³   ³   migration.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           compatibility.cpython-313.pyc
+³   ³   ³           event_schema.cpython-313.pyc
+³   ³   ³           migration.cpython-313.pyc
+³   ³   ³           __init__.cpython-313.pyc
+³   ³   ³           
+³   ³   ÀÄÄÄ__pycache__
+³   ³           base.cpython-313.pyc
+³   ³           execution_events.cpython-313.pyc
+³   ³           fill_events.cpython-313.pyc
+³   ³           idempotency.cpython-313.pyc
+³   ³           order_events.cpython-313.pyc
+³   ³           outbox.cpython-313.pyc
+³   ³           portfolio_events.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄfactories
+³   ³   ³   asset_factory.py
+³   ³   ³   instrument_factory.py
+³   ³   ³   portfolio_event_factory.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           asset_factory.cpython-313.pyc
+³   ³           instrument_factory.cpython-313.pyc
+³   ³           portfolio_event_factory.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄmodels
+³   ³   ³   enums.py
+³   ³   ³   timeframe.py
+³   ³   ³   value_objects.py
+³   ³   ³   
+³   ³   ÃÄÄÄentities
+³   ³   ³   ³   account.py
+³   ³   ³   ³   asset.py
+³   ³   ³   ³   execution.py
+³   ³   ³   ³   fill.py
+³   ³   ³   ³   holdings.py
+³   ³   ³   ³   instrument.py
+³   ³   ³   ³   market.py
+³   ³   ³   ³   market_capability.py
+³   ³   ³   ³   order.py
+³   ³   ³   ³   portfolio.py
+³   ³   ³   ³   position.py
+³   ³   ³   ³   trading_rules.py
+³   ³   ³   ³   trading_session.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           account.cpython-313.pyc
+³   ³   ³           asset.cpython-313.pyc
+³   ³   ³           execution.cpython-313.pyc
+³   ³   ³           fill.cpython-313.pyc
+³   ³   ³           holdings.cpython-313.pyc
+³   ³   ³           instrument.cpython-313.pyc
+³   ³   ³           market.cpython-313.pyc
+³   ³   ³           market_capability.cpython-313.pyc
+³   ³   ³           order.cpython-313.pyc
+³   ³   ³           portfolio.cpython-313.pyc
+³   ³   ³           position.cpython-313.pyc
+³   ³   ³           trading_rules.cpython-313.pyc
+³   ³   ³           trading_session.cpython-313.pyc
+³   ³   ³           __init__.cpython-313.pyc
+³   ³   ³           
+³   ³   ÀÄÄÄ__pycache__
+³   ³           enums.cpython-313.pyc
+³   ³           timeframe.cpython-313.pyc
+³   ³           value_objects.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄservices
+³   ³   ³   execution_aggregator.py
+³   ³   ³   portfolio_analytics_service.py
+³   ³   ³   portfolio_event_dispatcher.py
+³   ³   ³   portfolio_service.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           execution_aggregator.cpython-313.pyc
+³   ³           portfolio_analytics_service.cpython-313.pyc
+³   ³           portfolio_event_dispatcher.cpython-313.pyc
+³   ³           portfolio_service.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄshared
+³   ³   ³   confidence.py
+³   ³   ³   identifiers.py
+³   ³   ³   metadata.py
+³   ³   ³   provenance.py
+³   ³   ³   scoring.py
+³   ³   ³   timestamps.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           confidence.cpython-313.pyc
+³   ³           identifiers.cpython-313.pyc
+³   ³           metadata.cpython-313.pyc
+³   ³           provenance.cpython-313.pyc
+³   ³           scoring.cpython-313.pyc
+³   ³           timestamps.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄstate_machine
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄvalidation
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄ__pycache__
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄ01_DATA_ENGINE
+³   ÀÄÄÄaurora_data_engine
+ÃÄÄÄ02_QUANT_ENGINE
+³   ÃÄÄÄmodels
+³   ³       signal.py
+³   ³       
+³   ÀÄÄÄrules
+³           signal_rules.py
+³           
+ÃÄÄÄ03_INTELLIGENCE_ENGINE
+³   ³   .gitkeep
+³   ³   PHASE_5_5_1_RUNTIME_BOUNDARY.md
+³   ³   
+³   ÀÄÄÄdecision
+ÃÄÄÄ04_STRATEGIES
+ÃÄÄÄ04_STRATEGY_DNA
+³   ÃÄÄÄmodels
+³   ³       strategy_result.py
+³   ³       
+³   ÃÄÄÄstrategies
+³   ³       smc_strategy.py
+³   ³       
+³   ÀÄÄÄtests
+³           test_smc.py
+³           
+ÃÄÄÄ05_AI_ORCHESTRATION
+³   ³   PHASE_5_5_1_RUNTIME_BOUNDARY.md
+³   ³   
+³   ÃÄÄÄai_adapter_layer
+³   ³   ÃÄÄÄcore
+³   ³   ³   ³   ai_interface.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           ai_interface.cpython-313.pyc
+³   ³   ³           
+³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ai_response.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           ai_response.cpython-313.pyc
+³   ³   ³           
+³   ³   ÀÄÄÄproviders
+³   ³       ³   local_ai.py
+³   ³       ³   
+³   ³       ÀÄÄÄ__pycache__
+³   ³               local_ai.cpython-313.pyc
+³   ³               
+³   ÀÄÄÄintelligence_layer
+³       ÃÄÄÄadaptation
+³       ³   ³   adaptation.py
+³       ³   ³   __init__.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           adaptation.cpython-313.pyc
+³       ³           __init__.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄconfig
+³       ³   ³   intelligence_sources.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           intelligence_sources.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄexperience
+³       ³   ³   experience.py
+³       ³   ³   __init__.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           experience.cpython-313.pyc
+³       ³           __init__.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄknowledge
+³       ³   ³   knowledge.py
+³       ³   ³   __init__.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           knowledge.cpython-313.pyc
+³       ³           __init__.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄmodels
+³       ³   ³   intelligence_signal.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           intelligence_signal.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄpatterns
+³       ³   ³   pattern.py
+³       ³   ³   __init__.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           pattern.cpython-313.pyc
+³       ³           __init__.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄregistry
+³       ³   ³   source_registry.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           source_registry.cpython-313.pyc
+³       ³           
+³       ÃÄÄÄruntime
+³       ³   ³   capability_matcher.py
+³       ³   ³   expert_selector.py
+³       ³   ³   knowledge_artifact.py
+³       ³   ³   router.py
+³       ³   ³   __init__.py
+³       ³   ³   
+³       ³   ÀÄÄÄ__pycache__
+³       ³           capability_matcher.cpython-313.pyc
+³       ³           expert_selector.cpython-313.pyc
+³       ³           knowledge_artifact.cpython-313.pyc
+³       ³           router.cpython-313.pyc
+³       ³           __init__.cpython-313.pyc
+³       ³           
+³       ÀÄÄÄscoring
+³           ³   intelligence_score.py
+³           ³   
+³           ÀÄÄÄ__pycache__
+³                   intelligence_score.cpython-313.pyc
+³                   
+ÃÄÄÄ05_BACKTEST
+ÃÄÄÄ06_DECISION_ENGINE
+³   ³   PHASE_6_1_EVIDENCE_AGGREGATION.md
+³   ³   PHASE_6_2_FULL_RUNTIME_REDESIGN_V3.md
+³   ³   PHASE_6_3_1_EVIDENCE_GOVERNANCE.md
+³   ³   PHASE_6_3_2_GOVERNANCE_AWARE_CONSENSUS.md
+³   ³   PHASE_6_FINAL_RELEASE.md
+³   ³   
+³   ÃÄÄÄdecision
+³   ³   ³   aggregation.py
+³   ³   ³   consensus.py
+³   ³   ³   decision.py
+³   ³   ³   decision_context.py
+³   ³   ³   decision_engine.py
+³   ³   ³   decision_score.py
+³   ³   ³   evaluation.py
+³   ³   ³   evidence.py
+³   ³   ³   explainability.py
+³   ³   ³   governance.py
+³   ³   ³   quality.py
+³   ³   ³   reliability.py
+³   ³   ³   runtime.py
+³   ³   ³   score_fusion.py
+³   ³   ³   
+³   ³   ÃÄÄÄcontext
+³   ³   ³   ³   context.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           context.cpython-313.pyc
+³   ³   ³           __init__.cpython-313.pyc
+³   ³   ³           
+³   ³   ÃÄÄÄprovenance
+³   ³   ³   ³   provenance.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄ__pycache__
+³   ³   ³           provenance.cpython-313.pyc
+³   ³   ³           
+³   ³   ÀÄÄÄ__pycache__
+³   ³           aggregation.cpython-313.pyc
+³   ³           consensus.cpython-313.pyc
+³   ³           decision.cpython-313.pyc
+³   ³           decision_context.cpython-313.pyc
+³   ³           decision_engine.cpython-313.pyc
+³   ³           decision_score.cpython-313.pyc
+³   ³           evaluation.cpython-313.pyc
+³   ³           evidence.cpython-313.pyc
+³   ³           explainability.cpython-313.pyc
+³   ³           governance.cpython-313.pyc
+³   ³           quality.cpython-313.pyc
+³   ³           reliability.cpython-313.pyc
+³   ³           runtime.cpython-313.pyc
+³   ³           score_fusion.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄinfrastructure
+³       ³   contracts.py
+³       ³   mandatory_catalog.py
+³       ³   registry.py
+³       ³   
+³       ÀÄÄÄ__pycache__
+³               contracts.cpython-313.pyc
+³               mandatory_catalog.cpython-313.pyc
+³               registry.cpython-313.pyc
+³               
+ÃÄÄÄ06_MARKET_INTELLIGENCE
+³   ÃÄÄÄdata
+³   ³       mt5_feed.py
+³   ³       
+³   ÃÄÄÄindicators
+³   ÃÄÄÄmodels
+³   ³       candle.py
+³   ³       market_snapshot.py
+³   ³       
+³   ÃÄÄÄstructure
+³   ³       market_structure.py
+³   ³       
+³   ÃÄÄÄtests
+³   ÀÄÄÄvolume_profile
+³           fixed_range_profile.py
+³           
+ÃÄÄÄ07_AI_AGENTS
+ÃÄÄÄ07_RISK_ENGINE
+³   ³   PHASE_5_5_1_RUNTIME_BOUNDARY.md
+³   ³   
+³   ÀÄÄÄrisk
+³       ³   assessment.py
+³       ³   engine.py
+³       ³   events.py
+³       ³   explainability.py
+³       ³   exposure.py
+³       ³   market.py
+³       ³   metrics.py
+³       ³   policy.py
+³       ³   portfolio.py
+³       ³   stress.py
+³       ³   __init__.py
+³       ³   
+³       ÀÄÄÄ__pycache__
+³               assessment.cpython-313.pyc
+³               engine.cpython-313.pyc
+³               events.cpython-313.pyc
+³               explainability.cpython-313.pyc
+³               exposure.cpython-313.pyc
+³               market.cpython-313.pyc
+³               metrics.cpython-313.pyc
+³               policy.cpython-313.pyc
+³               portfolio.cpython-313.pyc
+³               stress.cpython-313.pyc
+³               __init__.cpython-313.pyc
+³               
+ÃÄÄÄ08_EXECUTION_ENGINE
+³   ÃÄÄÄbrokers
+³   ³   ³   base.py
+³   ³   ³   broker_resolution_registry.py
+³   ³   ³   broker_spec_audit.py
+³   ³   ³   mt5.py
+³   ³   ³   registry.py
+³   ³   ³   symbol_discovery.py
+³   ³   ³   symbol_identity.py
+³   ³   ³   universal_resolver.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÃÄÄÄprofiles
+³   ³   ³       litefinance_demo.json
+³   ³   ³       
+³   ³   ÀÄÄÄ__pycache__
+³   ³           base.cpython-313.pyc
+³   ³           broker_resolution_registry.cpython-313.pyc
+³   ³           broker_spec_audit.cpython-313.pyc
+³   ³           mt5.cpython-313.pyc
+³   ³           registry.cpython-313.pyc
+³   ³           symbol_discovery.cpython-313.pyc
+³   ³           symbol_identity.cpython-313.pyc
+³   ³           universal_resolver.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄcontracts
+³   ³   ³   portfolio_contract.py
+³   ³   ³   trade_contract.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           portfolio_contract.cpython-313.pyc
+³   ³           trade_contract.cpython-313.pyc
+³   ³           
+³   ÃÄÄÄcore
+³   ³   ³   execution_policy.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           execution_policy.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄlifecycle
+³       ³   trade_lifecycle.py
+³       ³   
+³       ÀÄÄÄ__pycache__
+³               trade_lifecycle.cpython-313.pyc
+³               
+ÃÄÄÄ08_TRADINGVIEW
+ÃÄÄÄ09_BACKTEST_ENGINE
+³       .gitkeep
+³       
+ÃÄÄÄ09_SIGNAL_GENERATOR
+³   ÃÄÄÄmodels
+³   ³       signal.py
+³   ³       
+³   ÃÄÄÄrules
+³   ³       signal_rules.py
+³   ³       
+³   ÀÄÄÄtests
+ÃÄÄÄ10_EVENT_BUS
+³   ³   .gitkeep
+³   ³   
+³   ÀÄÄÄevents
+³           event.py
+³           __init__.py
+³           
+ÃÄÄÄ15_DEPLOYMENT
+³   ³   .gitkeep
+³   ³   
+³   ÃÄÄÄobservability
+³   ³   ³   observability.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           observability.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄobservability_runtime
+³       ³   diagnostics.py
+³       ³   health.py
+³       ³   metrics.py
+³       ³   tracing.py
+³       ³   __init__.py
+³       ³   
+³       ÀÄÄÄ__pycache__
+³               diagnostics.cpython-313.pyc
+³               health.cpython-313.pyc
+³               metrics.cpython-313.pyc
+³               tracing.cpython-313.pyc
+³               __init__.cpython-313.pyc
+³               
+ÃÄÄÄ16_TEST_ARCHITECTURE
+³   ÃÄÄÄmigration_notes
+³   ³       LIDOMA_TEST_INDEX.txt
+³   ³       
+³   ÃÄÄÄreference
+³   ³   ÀÄÄÄLIDOMA_TEST_ARCHIVE
+³   ³       ³   test_account.py
+³   ³       ³   test_adaptation_foundation.py
+³   ³       ³   test_adaptation_integration.py
+³   ³       ³   test_adaptive_score.py
+³   ³       ³   test_ai_consensus_engine.py
+³   ³       ³   test_ai_consensus_runtime_integration.py
+³   ³       ³   test_ai_provider_governance.py
+³   ³       ³   test_ai_provider_governance_runtime.py
+³   ³       ³   test_architecture_contract_runtime.py
+³   ³       ³   test_architecture_runtime_validation.py
+³   ³       ³   test_asset.py
+³   ³       ³   test_audit_foundation.py
+³   ³       ³   test_audit_integration.py
+³   ³       ³   test_context_architecture.py
+³   ³       ³   test_decision_calibration.py
+³   ³       ³   test_decision_consensus.py
+³   ³       ³   test_decision_context_integration.py
+³   ³       ³   test_decision_engine.py
+³   ³       ³   test_decision_evaluation.py
+³   ³       ³   test_decision_evidence_aggregation.py
+³   ³       ³   test_decision_feedback.py
+³   ³       ³   test_decision_intelligence.py
+³   ³       ³   test_decision_memory.py
+³   ³       ³   test_decision_outcome.py
+³   ³       ³   test_decision_quality.py
+³   ³       ³   test_decision_runtime.py
+³   ³       ³   test_error_foundation.py
+³   ³       ³   test_event_api_integration.py
+³   ³       ³   test_event_backbone.py
+³   ³       ³   test_event_contract.py
+³   ³       ³   test_event_outbox_mapper.py
+³   ³       ³   test_event_reliability.py
+³   ³       ³   test_evidence_freshness.py
+³   ³       ³   test_evolution_end_to_end.py
+³   ³       ³   test_evolution_foundation.py
+³   ³       ³   test_evolution_governance.py
+³   ³       ³   test_evolution_pipeline.py
+³   ³       ³   test_evolution_runtime.py
+³   ³       ³   test_execution.py
+³   ³       ³   test_execution_aggregator.py
+³   ³       ³   test_experience_foundation.py
+³   ³       ³   test_experience_integration.py
+³   ³       ³   test_expert_intelligence_integration.py
+³   ³       ³   test_expert_intelligence_runtime.py
+³   ³       ³   test_expert_intelligence_runtime_integration.py
+³   ³       ³   test_expert_intelligence_runtime_validation.py
+³   ³       ³   test_factories.py
+³   ³       ³   test_fill.py
+³   ³       ³   test_financial_foundation.py
+³   ³       ³   test_financial_intelligence_flow.py
+³   ³       ³   test_financial_public_api.py
+³   ³       ³   test_financial_runtime.py
+³   ³       ³   test_governance_consensus.py
+³   ³       ³   test_health_foundation.py
+³   ³       ³   test_health_integration.py
+³   ³       ³   test_holdings.py
+³   ³       ³   test_idempotency.py
+³   ³       ³   test_instrument.py
+³   ³       ³   test_intelligence_routing.py
+³   ³       ³   test_knowledge_api_integration.py
+³   ³       ³   test_knowledge_foundation.py
+³   ³       ³   test_market_capability.py
+³   ³       ³   test_observability_foundation.py
+³   ³       ³   test_observability_integration.py
+³   ³       ³   test_order.py
+³   ³       ³   test_outbox.py
+³   ³       ³   test_pattern_foundation.py
+³   ³       ³   test_pattern_integration.py
+³   ³       ³   test_phase_6_4_feedback_loop.py
+³   ³       ³   test_phase_6_4_integration.py
+³   ³       ³   test_phase_6_final_validation.py
+³   ³       ³   test_portfolio.py
+³   ³       ³   test_portfolio_analytics_service.py
+³   ³       ³   test_portfolio_application_service.py
+³   ³       ³   test_portfolio_events.py
+³   ³       ³   test_portfolio_event_dispatcher.py
+³   ³       ³   test_portfolio_holdings.py
+³   ³       ³   test_portfolio_service.py
+³   ³       ³   test_position.py
+³   ³       ³   test_position_intelligence.py
+³   ³       ³   test_risk_foundation.py
+³   ³       ³   test_score_fusion.py
+³   ³       ³   test_trading_session.py
+³   ³       ³   test_value_objects.py
+³   ³       ³   
+³   ³       ÃÄÄÄaurora
+³   ³       ÀÄÄÄexpert
+³   ÀÄÄÄregression
+ÃÄÄÄARCHIVE
+³   ÃÄÄÄLIDOMA_ARCHIVE
+³   ³   ÃÄÄÄlidoma_architecture
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄgovernance
+³   ³   ³           compatibility.py
+³   ³   ³           contracts.py
+³   ³   ³           financial_contracts.py
+³   ³   ³           financial_runtime_contract.py
+³   ³   ³           financial_validator.py
+³   ³   ³           rules.py
+³   ³   ³           versioning.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄlidoma_core
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÃÄÄÄapplication
+³   ³   ³   ³       portfolio_application_service.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄconfig
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄcontracts
+³   ³   ³   ³       event_contract.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄdata_contracts
+³   ³   ³   ³       candle.py
+³   ³   ³   ³       corporate_action.py
+³   ³   ³   ³       funding.py
+³   ³   ³   ³       market_price.py
+³   ³   ³   ³       orderbook.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄevents
+³   ³   ³   ³   ³   base.py
+³   ³   ³   ³   ³   execution_events.py
+³   ³   ³   ³   ³   fill_events.py
+³   ³   ³   ³   ³   idempotency.py
+³   ³   ³   ³   ³   order_events.py
+³   ³   ³   ³   ³   outbox.py
+³   ³   ³   ³   ³   portfolio_events.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÀÄÄÄversioning
+³   ³   ³   ³           compatibility.py
+³   ³   ³   ³           event_schema.py
+³   ³   ³   ³           migration.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄfactories
+³   ³   ³   ³       asset_factory.py
+³   ³   ³   ³       instrument_factory.py
+³   ³   ³   ³       portfolio_event_factory.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³   enums.py
+³   ³   ³   ³   ³   timeframe.py
+³   ³   ³   ³   ³   value_objects.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÀÄÄÄentities
+³   ³   ³   ³           account.py
+³   ³   ³   ³           asset.py
+³   ³   ³   ³           execution.py
+³   ³   ³   ³           fill.py
+³   ³   ³   ³           holdings.py
+³   ³   ³   ³           instrument.py
+³   ³   ³   ³           market.py
+³   ³   ³   ³           market_capability.py
+³   ³   ³   ³           order.py
+³   ³   ³   ³           portfolio.py
+³   ³   ³   ³           position.py
+³   ³   ³   ³           trading_rules.py
+³   ³   ³   ³           trading_session.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄservices
+³   ³   ³   ³       event_outbox_mapper.py
+³   ³   ³   ³       execution_aggregator.py
+³   ³   ³   ³       portfolio_analytics_service.py
+³   ³   ³   ³       portfolio_event_dispatcher.py
+³   ³   ³   ³       portfolio_service.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄshared
+³   ³   ³   ³       confidence.py
+³   ³   ³   ³       identifiers.py
+³   ³   ³   ³       metadata.py
+³   ³   ³   ³       provenance.py
+³   ³   ³   ³       scoring.py
+³   ³   ³   ³       timestamps.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄstate_machine
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÀÄÄÄvalidation
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄlidoma_engines
+³   ³   ³   ³   contracts.py
+³   ³   ³   ³   mandatory_catalog.py
+³   ³   ³   ³   provenance.py
+³   ³   ³   ³   registry.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÃÄÄÄadaptation
+³   ³   ³   ³       adaptation.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄaudit
+³   ³   ³   ³       audit.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄcontext
+³   ³   ³   ³       context.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄdecision
+³   ³   ³   ³       adaptive_score.py
+³   ³   ³   ³       aggregation.py
+³   ³   ³   ³       calibration.py
+³   ³   ³   ³       consensus.py
+³   ³   ³   ³       correlation.py
+³   ³   ³   ³       decision.py
+³   ³   ³   ³       decision_context.py
+³   ³   ³   ³       decision_engine.py
+³   ³   ³   ³       decision_score.py
+³   ³   ³   ³       evaluation.py
+³   ³   ³   ³       evidence.py
+³   ³   ³   ³       explainability.py
+³   ³   ³   ³       feedback.py
+³   ³   ³   ³       freshness.py
+³   ³   ³   ³       freshness_decay.py
+³   ³   ³   ³       governance.py
+³   ³   ³   ³       intelligence.py
+³   ³   ³   ³       memory.py
+³   ³   ³   ³       outcome.py
+³   ³   ³   ³       quality.py
+³   ³   ³   ³       reliability.py
+³   ³   ³   ³       runtime.py
+³   ³   ³   ³       score_fusion.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄerrors
+³   ³   ³   ³       error.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄevents
+³   ³   ³   ³       event.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄevolution
+³   ³   ³   ³       audit.py
+³   ³   ³   ³       capture.py
+³   ³   ³   ³       events.py
+³   ³   ³   ³       extraction.py
+³   ³   ³   ³       governance.py
+³   ³   ³   ³       pipeline.py
+³   ³   ³   ³       proposal.py
+³   ³   ³   ³       runtime.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄexperience
+³   ³   ³   ³       experience.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄhealth
+³   ³   ³   ³       health.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄintelligence
+³   ³   ³   ³       capability_matcher.py
+³   ³   ³   ³       expert_selector.py
+³   ³   ³   ³       knowledge_artifact.py
+³   ³   ³   ³       router.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄknowledge
+³   ³   ³   ³       knowledge.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄobservability
+³   ³   ³   ³       observability.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄpatterns
+³   ³   ³   ³       pattern.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÀÄÄÄrisk
+³   ³   ³           assessment.py
+³   ³   ³           engine.py
+³   ³   ³           events.py
+³   ³   ³           explainability.py
+³   ³   ³           exposure.py
+³   ³   ³           market.py
+³   ³   ³           metrics.py
+³   ³   ³           policy.py
+³   ³   ³           portfolio.py
+³   ³   ³           stress.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄlidoma_finance
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÃÄÄÄadapters
+³   ³   ³   ³       broker.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄagents
+³   ³   ³   ³       trading.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄdecision
+³   ³   ³   ³       context.py
+³   ³   ³   ³       decision.py
+³   ³   ³   ³       engine.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄevolution
+³   ³   ³   ³       feedback.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄexecution
+³   ³   ³   ³       approval.py
+³   ³   ³   ³       order.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄexperience
+³   ³   ³   ³       record.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄintelligence
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄai
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   registry.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÃÄÄÄgovernance
+³   ³   ³   ³   ³   ³   ³   capability.py
+³   ³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   ³   credential.py
+³   ³   ³   ³   ³   ³   ³   health.py
+³   ³   ³   ³   ³   ³   ³   provider.py
+³   ³   ³   ³   ³   ³   ³   version.py
+³   ³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ³   ÀÄÄÄimplementations
+³   ³   ³   ³   ³   ³       ³   __init__.py
+³   ³   ³   ³   ³   ³       ³   
+³   ³   ³   ³   ³   ³       ÃÄÄÄcredentials
+³   ³   ³   ³   ³   ³       ³       environment.py
+³   ³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³   ³       ÃÄÄÄhealth
+³   ³   ³   ³   ³   ³       ³       monitor.py
+³   ³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³   ³       ÃÄÄÄregistry
+³   ³   ³   ³   ³   ³       ³       provider_registry.py
+³   ³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³   ³       ÀÄÄÄversioning
+³   ³   ³   ³   ³   ³               validator.py
+³   ³   ³   ³   ³   ³               __init__.py
+³   ³   ³   ³   ³   ³               
+³   ³   ³   ³   ³   ÃÄÄÄproviders
+³   ³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ³   ÀÄÄÄadapters
+³   ³   ³   ³   ³   ³           base.py
+³   ³   ³   ³   ³   ³           claude.py
+³   ³   ³   ³   ³   ³           deepseek.py
+³   ³   ³   ³   ³   ³           gemini.py
+³   ³   ³   ³   ³   ³           grok.py
+³   ³   ³   ³   ³   ³           openai.py
+³   ³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³   ³           
+³   ³   ³   ³   ³   ÀÄÄÄrouter
+³   ³   ³   ³   ³           contract.py
+³   ³   ³   ³   ³           engine.py
+³   ³   ³   ³   ³           response.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄarchitecture
+³   ³   ³   ³   ³       contract.py
+³   ³   ³   ³   ³       runtime.py
+³   ³   ³   ³   ³       validation.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄconsensus
+³   ³   ³   ³   ³   ³   confidence.py
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   ³   response.py
+³   ³   ³   ³   ³   ³   score.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³   ³       engine.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄevaluator
+³   ³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄnormalizer
+³   ³   ³   ³   ³   ³       normalizer.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÀÄÄÄweighting
+³   ³   ³   ³   ³           calculator.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄcontext
+³   ³   ³   ³   ³       assembler.py
+³   ³   ³   ³   ³       builder.py
+³   ³   ³   ³   ³       contract.py
+³   ³   ³   ³   ³       financial_context.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄdecision
+³   ³   ³   ³   ³   ³   context.py
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   enums.py
+³   ³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   ³   response.py
+³   ³   ³   ³   ³   ³   state.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÃÄÄÄaudit
+³   ³   ³   ³   ³   ³       decision_audit.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³   ³       decision_engine.py
+³   ³   ³   ³   ³   ³       engine.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄevaluation
+³   ³   ³   ³   ³   ³       decision_evaluator.py
+³   ³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄevaluator
+³   ³   ³   ³   ³   ³       decision_evaluator.py
+³   ³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄexecution
+³   ³   ³   ³   ³   ³       executor.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³   ³       action.py
+³   ³   ³   ³   ³   ³       confidence.py
+³   ³   ³   ³   ³   ³       evidence.py
+³   ³   ³   ³   ³   ³       impact.py
+³   ³   ³   ³   ³   ³       priority.py
+³   ³   ³   ³   ³   ³       rationale.py
+³   ³   ³   ³   ³   ³       risk.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄpolicy
+³   ³   ³   ³   ³   ³       decision_policy.py
+³   ³   ³   ³   ³   ³       policy_engine.py
+³   ³   ³   ³   ³   ³       rules.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄrisk
+³   ³   ³   ³   ³   ³       manager.py
+³   ³   ³   ³   ³   ³       risk.py
+³   ³   ³   ³   ³   ³       risk_assessor.py
+³   ³   ³   ³   ³   ³       risk_engine.py
+³   ³   ³   ³   ³   ³       risk_evaluator.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄscoring
+³   ³   ³   ³   ³   ³       decision_score.py
+³   ³   ³   ³   ³   ³       score.py
+³   ³   ³   ³   ³   ³       score_engine.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄvalidation
+³   ³   ³   ³   ³   ³       decision_validator.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÀÄÄÄweighting
+³   ³   ³   ³   ³           decision_weight.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄexperts
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   identity.py
+³   ³   ³   ³   ³   ³   profile.py
+³   ³   ³   ³   ³   ³   reliability.py
+³   ³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÃÄÄÄadapters
+³   ³   ³   ³   ³   ³       expert_adapter.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³   ³       expert_engine.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄevaluation
+³   ³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³   ³       performance_tracker.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄintegration
+³   ³   ³   ³   ³   ³       adapter.py
+³   ³   ³   ³   ³   ³       consensus_bridge.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄknowledge
+³   ³   ³   ³   ³   ³       contract.py
+³   ³   ³   ³   ³   ³       expert_knowledge.py
+³   ³   ³   ³   ³   ³       expert_memory.py
+³   ³   ³   ³   ³   ³       knowledge_base.py
+³   ³   ³   ³   ³   ³       repository.py
+³   ³   ³   ³   ³   ³       source.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄmemory
+³   ³   ³   ³   ³   ³       expert_memory.py
+³   ³   ³   ³   ³   ³       memory_store.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄregistry
+³   ³   ³   ³   ³   ³       expert_registry.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÀÄÄÄscoring
+³   ³   ³   ³   ³           reliability_engine.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄfundamental
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄknowledge
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   entity.py
+³   ³   ³   ³   ³   ³   graph.py
+³   ³   ³   ³   ³   ³   memory.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄstorage
+³   ³   ³   ³   ³           memory_store.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄquant
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄsearch
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   engine.py
+³   ³   ³   ³   ³   ³   query.py
+³   ³   ³   ³   ³   ³   ranking.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄindex
+³   ³   ³   ³   ³           memory_index.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄsentiment
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄsources
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÃÄÄÄadapters
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄdiscovery
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄextraction
+³   ³   ³   ³   ³   ³   ³   collector.py
+³   ³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   ³   pipeline.py
+³   ³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ³   ÀÄÄÄadapters
+³   ³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³   ³           
+³   ³   ³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³   ³       provenance.py
+³   ³   ³   ³   ³   ³       reliability.py
+³   ³   ³   ³   ³   ³       source_metadata.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÃÄÄÄnormalization
+³   ³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   ³   normalizer.py
+³   ³   ³   ³   ³   ³   ³   schema.py
+³   ³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ³   ÀÄÄÄtransformers
+³   ³   ³   ³   ³   ³           base.py
+³   ³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³   ³           
+³   ³   ³   ³   ³   ÃÄÄÄregistry
+³   ³   ³   ³   ³   ³       source_registry.py
+³   ³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³   ³       
+³   ³   ³   ³   ³   ÀÄÄÄvalidation
+³   ³   ³   ³   ³           rules.py
+³   ³   ³   ³   ³           score.py
+³   ³   ³   ³   ³           validator.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÀÄÄÄtechnical
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄlearning
+³   ³   ³   ³       loop.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄmarket
+³   ³   ³   ³   ³   data.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÀÄÄÄproviders
+³   ³   ³   ³           configuration.py
+³   ³   ³   ³           contract.py
+³   ³   ³   ³           registry.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄorchestration
+³   ³   ³   ³       trading_flow.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄportfolio
+³   ³   ³   ³       portfolio.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄrisk
+³   ³   ³   ³       assessment.py
+³   ³   ³   ³       gate.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄruntime
+³   ³   ³   ³       manager.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄsimulation
+³   ³   ³   ³       engine.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÀÄÄÄstrategy
+³   ³   ³           definition.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄlidoma_observability
+³   ³   ³       diagnostics.py
+³   ³   ³       health.py
+³   ³   ³       metrics.py
+³   ³   ³       tracing.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÀÄÄÄtests
+³   ³       ³   test_account.py
+³   ³       ³   test_adaptation_foundation.py
+³   ³       ³   test_adaptation_integration.py
+³   ³       ³   test_adaptive_score.py
+³   ³       ³   test_ai_consensus_engine.py
+³   ³       ³   test_ai_consensus_runtime_integration.py
+³   ³       ³   test_ai_provider_governance.py
+³   ³       ³   test_ai_provider_governance_runtime.py
+³   ³       ³   test_architecture_contract_runtime.py
+³   ³       ³   test_architecture_runtime_validation.py
+³   ³       ³   test_asset.py
+³   ³       ³   test_audit_foundation.py
+³   ³       ³   test_audit_integration.py
+³   ³       ³   test_context_architecture.py
+³   ³       ³   test_decision_calibration.py
+³   ³       ³   test_decision_consensus.py
+³   ³       ³   test_decision_context_integration.py
+³   ³       ³   test_decision_engine.py
+³   ³       ³   test_decision_evaluation.py
+³   ³       ³   test_decision_evidence_aggregation.py
+³   ³       ³   test_decision_feedback.py
+³   ³       ³   test_decision_intelligence.py
+³   ³       ³   test_decision_memory.py
+³   ³       ³   test_decision_outcome.py
+³   ³       ³   test_decision_quality.py
+³   ³       ³   test_decision_runtime.py
+³   ³       ³   test_error_foundation.py
+³   ³       ³   test_event_api_integration.py
+³   ³       ³   test_event_backbone.py
+³   ³       ³   test_event_contract.py
+³   ³       ³   test_event_outbox_mapper.py
+³   ³       ³   test_event_reliability.py
+³   ³       ³   test_evidence_freshness.py
+³   ³       ³   test_evolution_end_to_end.py
+³   ³       ³   test_evolution_foundation.py
+³   ³       ³   test_evolution_governance.py
+³   ³       ³   test_evolution_pipeline.py
+³   ³       ³   test_evolution_runtime.py
+³   ³       ³   test_execution.py
+³   ³       ³   test_execution_aggregator.py
+³   ³       ³   test_experience_foundation.py
+³   ³       ³   test_experience_integration.py
+³   ³       ³   test_expert_intelligence_integration.py
+³   ³       ³   test_expert_intelligence_runtime.py
+³   ³       ³   test_expert_intelligence_runtime_integration.py
+³   ³       ³   test_expert_intelligence_runtime_validation.py
+³   ³       ³   test_factories.py
+³   ³       ³   test_fill.py
+³   ³       ³   test_financial_foundation.py
+³   ³       ³   test_financial_intelligence_flow.py
+³   ³       ³   test_financial_public_api.py
+³   ³       ³   test_financial_runtime.py
+³   ³       ³   test_governance_consensus.py
+³   ³       ³   test_health_foundation.py
+³   ³       ³   test_health_integration.py
+³   ³       ³   test_holdings.py
+³   ³       ³   test_idempotency.py
+³   ³       ³   test_instrument.py
+³   ³       ³   test_intelligence_routing.py
+³   ³       ³   test_knowledge_api_integration.py
+³   ³       ³   test_knowledge_foundation.py
+³   ³       ³   test_market_capability.py
+³   ³       ³   test_observability_foundation.py
+³   ³       ³   test_observability_integration.py
+³   ³       ³   test_order.py
+³   ³       ³   test_outbox.py
+³   ³       ³   test_pattern_foundation.py
+³   ³       ³   test_pattern_integration.py
+³   ³       ³   test_phase_6_4_feedback_loop.py
+³   ³       ³   test_phase_6_4_integration.py
+³   ³       ³   test_phase_6_final_validation.py
+³   ³       ³   test_portfolio.py
+³   ³       ³   test_portfolio_analytics_service.py
+³   ³       ³   test_portfolio_application_service.py
+³   ³       ³   test_portfolio_events.py
+³   ³       ³   test_portfolio_event_dispatcher.py
+³   ³       ³   test_portfolio_holdings.py
+³   ³       ³   test_portfolio_service.py
+³   ³       ³   test_position.py
+³   ³       ³   test_position_intelligence.py
+³   ³       ³   test_risk_foundation.py
+³   ³       ³   test_score_fusion.py
+³   ³       ³   test_trading_session.py
+³   ³       ³   test_value_objects.py
+³   ³       ³   
+³   ³       ÃÄÄÄaurora
+³   ³       ÀÄÄÄexpert
+³   ÀÄÄÄLUNA_ARCHIVE
+³       ÀÄÄÄLUNA_TRADE_CORE
+³           ÀÄÄÄbrokers
+³               ³   base.py
+³               ³   broker_resolution_registry.py
+³               ³   broker_spec_audit.py
+³               ³   mt5.py
+³               ³   registry.py
+³               ³   symbol_discovery.py
+³               ³   symbol_identity.py
+³               ³   universal_resolver.py
+³               ³   __init__.py
+³               ³   
+³               ÀÄÄÄprofiles
+³                       litefinance_demo.json
+³                       
+ÃÄÄÄdocs
+³   ³   ARCHITECTURE.md
+³   ³   ARCHITECTURE_ALIGNMENT.md
+³   ³   
+³   ÃÄÄÄADR
+³   ³       ADR-001-risk-engine-architecture.md
+³   ³       ADR-006-evolution-foundation.md
+³   ³       ADR-007-decision-evidence-aggregation.md
+³   ³       ADR-008-consensus-reliability-dependency.md
+³   ³       ADR-008_MARKET_INTELLIGENCE_EXTENSIBLE_ARCHITECTURE.md
+³   ³       ADR-009_MULTI_AI_PROVIDER_ARCHITECTURE.md
+³   ³       ADR-010_AUTONOMOUS_SOURCE_INTELLIGENCE_ARCHITECTURE.md
+³   ³       ADR-011_AI_PROVIDER_GOVERNANCE_ARCHITECTURE.md
+³   ³       ADR-012_AI_CONSENSUS_REASONING_ENGINE_ARCHITECTURE.md
+³   ³       ADR-013_EXPERT_INTELLIGENCE_INTEGRATION_ARCHITECTURE.md
+³   ³       ADR-014_EXPERT_INTELLIGENCE_ADVANCED_ARCHITECTURE.md
+³   ³       ADR-014_EXPERT_INTELLIGENCE_RUNTIME_ENGINE_ARCHITECTURE.md
+³   ³       ADR-014_FINANCIAL_DECISION_INTELLIGENCE_ARCHITECTURE.md
+³   ³       ADR-014_FINANCIAL_INTELLIGENCE_DECISION_ENGINE_ARCHITECTURE.md
+³   ³       ADR-014_INTELLIGENCE_DECISION_LAYER_ARCHITECTURE.md
+³   ³       ADR-014_MARKET_INTELLIGENCE_UNIFIED_GOVERNANCE_ARCHITECTURE.md
+³   ³       
+³   ÀÄÄÄnotes
+³           PHASE_6_14_RISK_ENGINE_FLOAT_PRECISION_FIX_NOTE.md
+³           PHASE_6_15_1_ARCHITECTURE_GOVERNANCE_LAYER_NOTE.md
+³           PHASE_6_15_2_SHARED_KERNEL_LAYER_NOTE.md
+³           PHASE_6_15_3_EVENT_VERSIONING_LAYER_NOTE.md
+³           PHASE_6_15_4_DATA_CONTRACT_LAYER_NOTE.md
+³           PHASE_6_15_5_RISK_CORE_UPGRADE_NOTE.md
+³           PHASE_6_15_6_OBSERVABILITY_LAYER_NOTE.md
+³           PHASE_7_FINANCIAL_INTELLIGENCE_FOUNDATION_FINAL.md
+³           PHASE_7_FINANCIAL_INTELLIGENCE_FOUNDATION_NOTE.md
+³           PHASE_8_AI_MARKET_INTELLIGENCE_EXECUTION_PLAN.md
+³           PHASE_8_MARKET_INTELLIGENCE_ARCHITECTURE_SPECIFICATION.md
+³           PHASE_8_SOURCE_INTELLIGENCE_EXECUTION_SPECIFICATION.md
+³           PHASE_8_STEP_21_B_ROOT_EXPORT_UPDATE.md
+³           
+ÃÄÄÄLIDOMA_SOURCE
+ÃÄÄÄLUNA_SOURCE
+ÃÄÄÄsrc_LEGACY_ARCHIVE
+³   ÃÄÄÄlidoma_architecture
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄgovernance
+³   ³           compatibility.py
+³   ³           contracts.py
+³   ³           financial_contracts.py
+³   ³           financial_runtime_contract.py
+³   ³           financial_validator.py
+³   ³           rules.py
+³   ³           versioning.py
+³   ³           __init__.py
+³   ³           
+³   ÃÄÄÄlidoma_core
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÃÄÄÄapplication
+³   ³   ³       portfolio_application_service.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄconfig
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄcontracts
+³   ³   ³       event_contract.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄdata_contracts
+³   ³   ³       candle.py
+³   ³   ³       corporate_action.py
+³   ³   ³       funding.py
+³   ³   ³       market_price.py
+³   ³   ³       orderbook.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄevents
+³   ³   ³   ³   base.py
+³   ³   ³   ³   execution_events.py
+³   ³   ³   ³   fill_events.py
+³   ³   ³   ³   idempotency.py
+³   ³   ³   ³   order_events.py
+³   ³   ³   ³   outbox.py
+³   ³   ³   ³   portfolio_events.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄversioning
+³   ³   ³           compatibility.py
+³   ³   ³           event_schema.py
+³   ³   ³           migration.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄfactories
+³   ³   ³       asset_factory.py
+³   ³   ³       instrument_factory.py
+³   ³   ³       portfolio_event_factory.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   enums.py
+³   ³   ³   ³   timeframe.py
+³   ³   ³   ³   value_objects.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄentities
+³   ³   ³           account.py
+³   ³   ³           asset.py
+³   ³   ³           execution.py
+³   ³   ³           fill.py
+³   ³   ³           holdings.py
+³   ³   ³           instrument.py
+³   ³   ³           market.py
+³   ³   ³           market_capability.py
+³   ³   ³           order.py
+³   ³   ³           portfolio.py
+³   ³   ³           position.py
+³   ³   ³           trading_rules.py
+³   ³   ³           trading_session.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄservices
+³   ³   ³       event_outbox_mapper.py
+³   ³   ³       execution_aggregator.py
+³   ³   ³       portfolio_analytics_service.py
+³   ³   ³       portfolio_event_dispatcher.py
+³   ³   ³       portfolio_service.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄshared
+³   ³   ³       confidence.py
+³   ³   ³       identifiers.py
+³   ³   ³       metadata.py
+³   ³   ³       provenance.py
+³   ³   ³       scoring.py
+³   ³   ³       timestamps.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄstate_machine
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÀÄÄÄvalidation
+³   ³           __init__.py
+³   ³           
+³   ÃÄÄÄlidoma_engines
+³   ³   ³   contracts.py
+³   ³   ³   mandatory_catalog.py
+³   ³   ³   provenance.py
+³   ³   ³   registry.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÃÄÄÄadaptation
+³   ³   ³       adaptation.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄaudit
+³   ³   ³       audit.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄcontext
+³   ³   ³       context.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄdecision
+³   ³   ³       adaptive_score.py
+³   ³   ³       aggregation.py
+³   ³   ³       calibration.py
+³   ³   ³       consensus.py
+³   ³   ³       correlation.py
+³   ³   ³       decision.py
+³   ³   ³       decision_context.py
+³   ³   ³       decision_engine.py
+³   ³   ³       decision_score.py
+³   ³   ³       evaluation.py
+³   ³   ³       evidence.py
+³   ³   ³       explainability.py
+³   ³   ³       feedback.py
+³   ³   ³       freshness.py
+³   ³   ³       freshness_decay.py
+³   ³   ³       governance.py
+³   ³   ³       intelligence.py
+³   ³   ³       memory.py
+³   ³   ³       outcome.py
+³   ³   ³       quality.py
+³   ³   ³       reliability.py
+³   ³   ³       runtime.py
+³   ³   ³       score_fusion.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄerrors
+³   ³   ³       error.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄevents
+³   ³   ³       event.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄevolution
+³   ³   ³       audit.py
+³   ³   ³       capture.py
+³   ³   ³       events.py
+³   ³   ³       extraction.py
+³   ³   ³       governance.py
+³   ³   ³       pipeline.py
+³   ³   ³       proposal.py
+³   ³   ³       runtime.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄexperience
+³   ³   ³       experience.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄhealth
+³   ³   ³       health.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄintelligence
+³   ³   ³       capability_matcher.py
+³   ³   ³       expert_selector.py
+³   ³   ³       knowledge_artifact.py
+³   ³   ³       router.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄknowledge
+³   ³   ³       knowledge.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄobservability
+³   ³   ³       observability.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄpatterns
+³   ³   ³       pattern.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÀÄÄÄrisk
+³   ³           assessment.py
+³   ³           engine.py
+³   ³           events.py
+³   ³           explainability.py
+³   ³           exposure.py
+³   ³           market.py
+³   ³           metrics.py
+³   ³           policy.py
+³   ³           portfolio.py
+³   ³           stress.py
+³   ³           __init__.py
+³   ³           
+³   ÃÄÄÄlidoma_finance
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÃÄÄÄadapters
+³   ³   ³       broker.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄagents
+³   ³   ³       trading.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄdecision
+³   ³   ³       context.py
+³   ³   ³       decision.py
+³   ³   ³       engine.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄevolution
+³   ³   ³       feedback.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄexecution
+³   ³   ³       approval.py
+³   ³   ³       order.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄexperience
+³   ³   ³       record.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄintelligence
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÃÄÄÄai
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   registry.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄgovernance
+³   ³   ³   ³   ³   ³   capability.py
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   credential.py
+³   ³   ³   ³   ³   ³   health.py
+³   ³   ³   ³   ³   ³   provider.py
+³   ³   ³   ³   ³   ³   version.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄimplementations
+³   ³   ³   ³   ³       ³   __init__.py
+³   ³   ³   ³   ³       ³   
+³   ³   ³   ³   ³       ÃÄÄÄcredentials
+³   ³   ³   ³   ³       ³       environment.py
+³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³       ÃÄÄÄhealth
+³   ³   ³   ³   ³       ³       monitor.py
+³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³       ÃÄÄÄregistry
+³   ³   ³   ³   ³       ³       provider_registry.py
+³   ³   ³   ³   ³       ³       __init__.py
+³   ³   ³   ³   ³       ³       
+³   ³   ³   ³   ³       ÀÄÄÄversioning
+³   ³   ³   ³   ³               validator.py
+³   ³   ³   ³   ³               __init__.py
+³   ³   ³   ³   ³               
+³   ³   ³   ³   ÃÄÄÄproviders
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄadapters
+³   ³   ³   ³   ³           base.py
+³   ³   ³   ³   ³           claude.py
+³   ³   ³   ³   ³           deepseek.py
+³   ³   ³   ³   ³           gemini.py
+³   ³   ³   ³   ³           grok.py
+³   ³   ³   ³   ³           openai.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÀÄÄÄrouter
+³   ³   ³   ³           contract.py
+³   ³   ³   ³           engine.py
+³   ³   ³   ³           response.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄarchitecture
+³   ³   ³   ³       contract.py
+³   ³   ³   ³       runtime.py
+³   ³   ³   ³       validation.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄconsensus
+³   ³   ³   ³   ³   confidence.py
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   response.py
+³   ³   ³   ³   ³   score.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³       engine.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄevaluator
+³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄnormalizer
+³   ³   ³   ³   ³       normalizer.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÀÄÄÄweighting
+³   ³   ³   ³           calculator.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄcontext
+³   ³   ³   ³       assembler.py
+³   ³   ³   ³       builder.py
+³   ³   ³   ³       contract.py
+³   ³   ³   ³       financial_context.py
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄdecision
+³   ³   ³   ³   ³   context.py
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   enums.py
+³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   response.py
+³   ³   ³   ³   ³   state.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄaudit
+³   ³   ³   ³   ³       decision_audit.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³       decision_engine.py
+³   ³   ³   ³   ³       engine.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄevaluation
+³   ³   ³   ³   ³       decision_evaluator.py
+³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄevaluator
+³   ³   ³   ³   ³       decision_evaluator.py
+³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄexecution
+³   ³   ³   ³   ³       executor.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³       action.py
+³   ³   ³   ³   ³       confidence.py
+³   ³   ³   ³   ³       evidence.py
+³   ³   ³   ³   ³       impact.py
+³   ³   ³   ³   ³       priority.py
+³   ³   ³   ³   ³       rationale.py
+³   ³   ³   ³   ³       risk.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄpolicy
+³   ³   ³   ³   ³       decision_policy.py
+³   ³   ³   ³   ³       policy_engine.py
+³   ³   ³   ³   ³       rules.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄrisk
+³   ³   ³   ³   ³       manager.py
+³   ³   ³   ³   ³       risk.py
+³   ³   ³   ³   ³       risk_assessor.py
+³   ³   ³   ³   ³       risk_engine.py
+³   ³   ³   ³   ³       risk_evaluator.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄscoring
+³   ³   ³   ³   ³       decision_score.py
+³   ³   ³   ³   ³       score.py
+³   ³   ³   ³   ³       score_engine.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄvalidation
+³   ³   ³   ³   ³       decision_validator.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÀÄÄÄweighting
+³   ³   ³   ³           decision_weight.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄexperts
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   identity.py
+³   ³   ³   ³   ³   profile.py
+³   ³   ³   ³   ³   reliability.py
+³   ³   ³   ³   ³   request.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄadapters
+³   ³   ³   ³   ³       expert_adapter.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄengine
+³   ³   ³   ³   ³       expert_engine.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄevaluation
+³   ³   ³   ³   ³       evaluator.py
+³   ³   ³   ³   ³       performance_tracker.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄintegration
+³   ³   ³   ³   ³       adapter.py
+³   ³   ³   ³   ³       consensus_bridge.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄknowledge
+³   ³   ³   ³   ³       contract.py
+³   ³   ³   ³   ³       expert_knowledge.py
+³   ³   ³   ³   ³       expert_memory.py
+³   ³   ³   ³   ³       knowledge_base.py
+³   ³   ³   ³   ³       repository.py
+³   ³   ³   ³   ³       source.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄmemory
+³   ³   ³   ³   ³       expert_memory.py
+³   ³   ³   ³   ³       memory_store.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄregistry
+³   ³   ³   ³   ³       expert_registry.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÀÄÄÄscoring
+³   ³   ³   ³           reliability_engine.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄfundamental
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄknowledge
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   entity.py
+³   ³   ³   ³   ³   graph.py
+³   ³   ³   ³   ³   memory.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÀÄÄÄstorage
+³   ³   ³   ³           memory_store.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄquant
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄsearch
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   engine.py
+³   ³   ³   ³   ³   query.py
+³   ³   ³   ³   ³   ranking.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÀÄÄÄindex
+³   ³   ³   ³           memory_index.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÃÄÄÄsentiment
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÃÄÄÄsources
+³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   
+³   ³   ³   ³   ÃÄÄÄadapters
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄdiscovery
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄextraction
+³   ³   ³   ³   ³   ³   collector.py
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   pipeline.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄadapters
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³   ³       provenance.py
+³   ³   ³   ³   ³       reliability.py
+³   ³   ³   ³   ³       source_metadata.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÃÄÄÄnormalization
+³   ³   ³   ³   ³   ³   contract.py
+³   ³   ³   ³   ³   ³   normalizer.py
+³   ³   ³   ³   ³   ³   schema.py
+³   ³   ³   ³   ³   ³   __init__.py
+³   ³   ³   ³   ³   ³   
+³   ³   ³   ³   ³   ÀÄÄÄtransformers
+³   ³   ³   ³   ³           base.py
+³   ³   ³   ³   ³           __init__.py
+³   ³   ³   ³   ³           
+³   ³   ³   ³   ÃÄÄÄregistry
+³   ³   ³   ³   ³       source_registry.py
+³   ³   ³   ³   ³       __init__.py
+³   ³   ³   ³   ³       
+³   ³   ³   ³   ÀÄÄÄvalidation
+³   ³   ³   ³           rules.py
+³   ³   ³   ³           score.py
+³   ³   ³   ³           validator.py
+³   ³   ³   ³           __init__.py
+³   ³   ³   ³           
+³   ³   ³   ÀÄÄÄtechnical
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄlearning
+³   ³   ³       loop.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄmarket
+³   ³   ³   ³   data.py
+³   ³   ³   ³   __init__.py
+³   ³   ³   ³   
+³   ³   ³   ÃÄÄÄmodels
+³   ³   ³   ³       __init__.py
+³   ³   ³   ³       
+³   ³   ³   ÀÄÄÄproviders
+³   ³   ³           configuration.py
+³   ³   ³           contract.py
+³   ³   ³           registry.py
+³   ³   ³           __init__.py
+³   ³   ³           
+³   ³   ÃÄÄÄorchestration
+³   ³   ³       trading_flow.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄportfolio
+³   ³   ³       portfolio.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄrisk
+³   ³   ³       assessment.py
+³   ³   ³       gate.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄruntime
+³   ³   ³       manager.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÃÄÄÄsimulation
+³   ³   ³       engine.py
+³   ³   ³       __init__.py
+³   ³   ³       
+³   ³   ÀÄÄÄstrategy
+³   ³           definition.py
+³   ³           __init__.py
+³   ³           
+³   ÀÄÄÄlidoma_observability
+³           diagnostics.py
+³           health.py
+³           metrics.py
+³           tracing.py
+³           __init__.py
+³           
+ÃÄÄÄtests
+ÃÄÄÄtests_LIDOMA_ARCHIVE
+³   ³   test_account.py
+³   ³   test_adaptation_foundation.py
+³   ³   test_adaptation_integration.py
+³   ³   test_adaptive_score.py
+³   ³   test_ai_consensus_engine.py
+³   ³   test_ai_consensus_runtime_integration.py
+³   ³   test_ai_provider_governance.py
+³   ³   test_ai_provider_governance_runtime.py
+³   ³   test_architecture_contract_runtime.py
+³   ³   test_architecture_runtime_validation.py
+³   ³   test_asset.py
+³   ³   test_audit_foundation.py
+³   ³   test_audit_integration.py
+³   ³   test_context_architecture.py
+³   ³   test_decision_calibration.py
+³   ³   test_decision_consensus.py
+³   ³   test_decision_context_integration.py
+³   ³   test_decision_engine.py
+³   ³   test_decision_evaluation.py
+³   ³   test_decision_evidence_aggregation.py
+³   ³   test_decision_feedback.py
+³   ³   test_decision_intelligence.py
+³   ³   test_decision_memory.py
+³   ³   test_decision_outcome.py
+³   ³   test_decision_quality.py
+³   ³   test_decision_runtime.py
+³   ³   test_error_foundation.py
+³   ³   test_event_api_integration.py
+³   ³   test_event_backbone.py
+³   ³   test_event_contract.py
+³   ³   test_event_outbox_mapper.py
+³   ³   test_event_reliability.py
+³   ³   test_evidence_freshness.py
+³   ³   test_evolution_end_to_end.py
+³   ³   test_evolution_foundation.py
+³   ³   test_evolution_governance.py
+³   ³   test_evolution_pipeline.py
+³   ³   test_evolution_runtime.py
+³   ³   test_execution.py
+³   ³   test_execution_aggregator.py
+³   ³   test_experience_foundation.py
+³   ³   test_experience_integration.py
+³   ³   test_expert_intelligence_integration.py
+³   ³   test_expert_intelligence_runtime.py
+³   ³   test_expert_intelligence_runtime_integration.py
+³   ³   test_expert_intelligence_runtime_validation.py
+³   ³   test_factories.py
+³   ³   test_fill.py
+³   ³   test_financial_foundation.py
+³   ³   test_financial_intelligence_flow.py
+³   ³   test_financial_public_api.py
+³   ³   test_financial_runtime.py
+³   ³   test_governance_consensus.py
+³   ³   test_health_foundation.py
+³   ³   test_health_integration.py
+³   ³   test_holdings.py
+³   ³   test_idempotency.py
+³   ³   test_instrument.py
+³   ³   test_intelligence_routing.py
+³   ³   test_knowledge_api_integration.py
+³   ³   test_knowledge_foundation.py
+³   ³   test_market_capability.py
+³   ³   test_observability_foundation.py
+³   ³   test_observability_integration.py
+³   ³   test_order.py
+³   ³   test_outbox.py
+³   ³   test_pattern_foundation.py
+³   ³   test_pattern_integration.py
+³   ³   test_phase_6_4_feedback_loop.py
+³   ³   test_phase_6_4_integration.py
+³   ³   test_phase_6_final_validation.py
+³   ³   test_portfolio.py
+³   ³   test_portfolio_analytics_service.py
+³   ³   test_portfolio_application_service.py
+³   ³   test_portfolio_events.py
+³   ³   test_portfolio_event_dispatcher.py
+³   ³   test_portfolio_holdings.py
+³   ³   test_portfolio_service.py
+³   ³   test_position.py
+³   ³   test_position_intelligence.py
+³   ³   test_risk_foundation.py
+³   ³   test_score_fusion.py
+³   ³   test_trading_session.py
+³   ³   test_value_objects.py
+³   ³   
+³   ÃÄÄÄaurora
+³   ÀÄÄÄexpert
+ÀÄÄÄtools
+        intelligence_package_audit.py
+        
