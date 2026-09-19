@@ -1,0 +1,27 @@
+Folder PATH listing
+Volume serial number is 000000E1 9086:A5D3
+F:\AURORA_PROJECT\01_AURORA_SOURCE_BASE\15_DEPLOYMENT
+³   .gitkeep
+³   
+ÃÄÄÄobservability
+³   ³   observability.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           observability.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÀÄÄÄobservability_runtime
+    ³   diagnostics.py
+    ³   health.py
+    ³   metrics.py
+    ³   tracing.py
+    ³   __init__.py
+    ³   
+    ÀÄÄÄ__pycache__
+            diagnostics.cpython-313.pyc
+            health.cpython-313.pyc
+            metrics.cpython-313.pyc
+            tracing.cpython-313.pyc
+            __init__.cpython-313.pyc
+            

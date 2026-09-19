@@ -1,0 +1,48 @@
+Folder PATH listing
+Volume serial number is 00000063 9086:A5D3
+F:\AURORA_PROJECT\01_AURORA_SOURCE_BASE\08_EXECUTION_ENGINE
+ÃÄÄÄbrokers
+³   ³   base.py
+³   ³   broker_resolution_registry.py
+³   ³   broker_spec_audit.py
+³   ³   mt5.py
+³   ³   registry.py
+³   ³   symbol_discovery.py
+³   ³   symbol_identity.py
+³   ³   universal_resolver.py
+³   ³   __init__.py
+³   ³   
+³   ÃÄÄÄprofiles
+³   ³       litefinance_demo.json
+³   ³       
+³   ÀÄÄÄ__pycache__
+³           base.cpython-313.pyc
+³           broker_resolution_registry.cpython-313.pyc
+³           broker_spec_audit.cpython-313.pyc
+³           mt5.cpython-313.pyc
+³           registry.cpython-313.pyc
+³           symbol_discovery.cpython-313.pyc
+³           symbol_identity.cpython-313.pyc
+³           universal_resolver.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄcontracts
+³   ³   portfolio_contract.py
+³   ³   trade_contract.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           portfolio_contract.cpython-313.pyc
+³           trade_contract.cpython-313.pyc
+³           
+ÃÄÄÄcore
+³   ³   execution_policy.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           execution_policy.cpython-313.pyc
+³           
+ÀÄÄÄlifecycle
+    ³   trade_lifecycle.py
+    ³   
+    ÀÄÄÄ__pycache__
+            trade_lifecycle.cpython-313.pyc
+            

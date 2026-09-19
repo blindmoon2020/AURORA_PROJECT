@@ -1,0 +1,162 @@
+Folder PATH listing
+Volume serial number is 000000CB 9086:A5D3
+F:\AURORA_PROJECT\01_AURORA_SOURCE_BASE\00_CORE
+³   __init__.py
+³   
+ÃÄÄÄapplication
+³   ³   portfolio_application_service.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           portfolio_application_service.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄcontracts
+³   ³   event_contract.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           event_contract.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄdata_contracts
+³   ³   candle.py
+³   ³   corporate_action.py
+³   ³   funding.py
+³   ³   market_price.py
+³   ³   orderbook.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           candle.cpython-313.pyc
+³           corporate_action.cpython-313.pyc
+³           funding.cpython-313.pyc
+³           market_price.cpython-313.pyc
+³           orderbook.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄevents
+³   ³   base.py
+³   ³   execution_events.py
+³   ³   fill_events.py
+³   ³   idempotency.py
+³   ³   order_events.py
+³   ³   outbox.py
+³   ³   portfolio_events.py
+³   ³   
+³   ÃÄÄÄversioning
+³   ³   ³   compatibility.py
+³   ³   ³   event_schema.py
+³   ³   ³   migration.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           compatibility.cpython-313.pyc
+³   ³           event_schema.cpython-313.pyc
+³   ³           migration.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄ__pycache__
+³           base.cpython-313.pyc
+³           execution_events.cpython-313.pyc
+³           fill_events.cpython-313.pyc
+³           idempotency.cpython-313.pyc
+³           order_events.cpython-313.pyc
+³           outbox.cpython-313.pyc
+³           portfolio_events.cpython-313.pyc
+³           
+ÃÄÄÄfactories
+³   ³   asset_factory.py
+³   ³   instrument_factory.py
+³   ³   portfolio_event_factory.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           asset_factory.cpython-313.pyc
+³           instrument_factory.cpython-313.pyc
+³           portfolio_event_factory.cpython-313.pyc
+³           
+ÃÄÄÄmodels
+³   ³   enums.py
+³   ³   timeframe.py
+³   ³   value_objects.py
+³   ³   
+³   ÃÄÄÄentities
+³   ³   ³   account.py
+³   ³   ³   asset.py
+³   ³   ³   execution.py
+³   ³   ³   fill.py
+³   ³   ³   holdings.py
+³   ³   ³   instrument.py
+³   ³   ³   market.py
+³   ³   ³   market_capability.py
+³   ³   ³   order.py
+³   ³   ³   portfolio.py
+³   ³   ³   position.py
+³   ³   ³   trading_rules.py
+³   ³   ³   trading_session.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           account.cpython-313.pyc
+³   ³           asset.cpython-313.pyc
+³   ³           execution.cpython-313.pyc
+³   ³           fill.cpython-313.pyc
+³   ³           holdings.cpython-313.pyc
+³   ³           instrument.cpython-313.pyc
+³   ³           market.cpython-313.pyc
+³   ³           market_capability.cpython-313.pyc
+³   ³           order.cpython-313.pyc
+³   ³           portfolio.cpython-313.pyc
+³   ³           position.cpython-313.pyc
+³   ³           trading_rules.cpython-313.pyc
+³   ³           trading_session.cpython-313.pyc
+³   ³           __init__.cpython-313.pyc
+³   ³           
+³   ÀÄÄÄ__pycache__
+³           enums.cpython-313.pyc
+³           timeframe.cpython-313.pyc
+³           value_objects.cpython-313.pyc
+³           
+ÃÄÄÄservices
+³   ³   execution_aggregator.py
+³   ³   portfolio_analytics_service.py
+³   ³   portfolio_event_dispatcher.py
+³   ³   portfolio_service.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           execution_aggregator.cpython-313.pyc
+³           portfolio_analytics_service.cpython-313.pyc
+³           portfolio_event_dispatcher.cpython-313.pyc
+³           portfolio_service.cpython-313.pyc
+³           
+ÃÄÄÄshared
+³   ³   confidence.py
+³   ³   identifiers.py
+³   ³   metadata.py
+³   ³   provenance.py
+³   ³   scoring.py
+³   ³   timestamps.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           confidence.cpython-313.pyc
+³           identifiers.cpython-313.pyc
+³           metadata.cpython-313.pyc
+³           provenance.cpython-313.pyc
+³           scoring.cpython-313.pyc
+³           timestamps.cpython-313.pyc
+³           
+ÃÄÄÄstate_machine
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄvalidation
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           __init__.cpython-313.pyc
+³           
+ÀÄÄÄ__pycache__
+        __init__.cpython-313.pyc
+        
