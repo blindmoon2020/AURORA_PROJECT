@@ -1,0 +1,17 @@
+﻿{
+  "broker_id": "litefinance_demo",
+  "name": "LiteFinance Demo",
+  "type": "mt5",
+
+  "terminal": {
+    "required": true
+  },
+
+  "symbols": {
+    "EURUSD": "EURUSD_o",
+    "XAUUSD": "XAUUSD_o",
+    "NASDAQ_100": "NQ"
+  },
+
+  "execution_enabled": false
+}
