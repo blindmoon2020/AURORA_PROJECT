@@ -1,4 +1,0 @@
-00_CORE\data_contracts\__init__.py:LIDOMA Data Contracts Public API.
-00_CORE\events\base.py:    Base class for all LIDOMA domain events.
-00_CORE\events\order_events.py:    is created inside LIDOMA domain.
-00_CORE\events\versioning\__init__.py:LIDOMA Event Versioning Public API.

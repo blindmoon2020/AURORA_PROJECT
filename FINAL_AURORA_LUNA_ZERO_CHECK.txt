@@ -1,0 +1,7 @@
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\base.py:            "LUNA execution is disabled in architecture-v2."
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\broker_resolution_registry.py:print("LUNA BROKER RESOLUTION REGISTRY")
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\broker_spec_audit.py:    print("LUNA BROKER RESOLUTION & SPECIFICATION AUDIT")
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\mt5.py:    Strategy-facing methods accept canonical LUNA symbols.
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\symbol_discovery.py:    print("LUNA SYMBOL DISCOVERY AUDIT")
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\symbol_identity.py:    print("LUNA UNIVERSAL SYMBOL IDENTITY")
+ARCHIVE\LUNA_ARCHIVE\LUNA_TRADE_CORE\brokers\universal_resolver.py:print("LUNA UNIVERSAL MT5 AUTO DISCOVERY")
