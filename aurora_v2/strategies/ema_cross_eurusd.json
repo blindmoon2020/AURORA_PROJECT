@@ -1,0 +1,18 @@
+{
+  "name": "ema_cross_eurusd",
+  "symbol": "EURUSD",
+  "type": "ema_cross",
+  "notes": "Baseline plumbing check, not an edge. EMA20 crosses EMA50, stop beyond the 10-bar swing, 2R target.",
+  "params": {
+    "fast": 20,
+    "slow": 50,
+    "stop_lookback": 10,
+    "rr": 2.0
+  },
+  "risk": {
+    "risk_per_trade_pct": 0.5,
+    "daily_loss_cap_pct": 2.0,
+    "max_open_positions": 1,
+    "max_leverage": 30.0
+  }
+}

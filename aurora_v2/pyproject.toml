@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aurora-v2"
+version = "0.1.0"
+description = "A small, runnable trading core: strategy as data, separate risk engine, event bus, decision log"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
+
+[tool.setuptools]
+packages = [
+    "aurora",
+    "aurora.core",
+    "aurora.risk",
+    "aurora.strategies",
+    "aurora.data",
+    "aurora.execution",
+    "aurora.journal",
+    "aurora.backtest",
+]
+
+[tool.unittest]
+start-dir = "tests"

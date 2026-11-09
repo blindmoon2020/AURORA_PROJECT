@@ -1,0 +1,2 @@
+# Zero runtime dependencies on purpose: the core runs on the standard library.
+# Real broker/data adapters will add their own pins here when they land.
