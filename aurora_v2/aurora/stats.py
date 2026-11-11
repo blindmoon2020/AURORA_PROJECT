@@ -227,3 +227,19 @@ def deflated_sharpe_ratio(
         z = (sr - sr0) * math.sqrt(n - 1) / math.sqrt(denom)
         dsr = _N.cdf(z)
     return {"sr": sr, "sr0": sr0, "dsr": dsr, "trials": len(trial_srs)}
+
+
+def min_backtest_length_years(n_trials: int, target_sr: float = 1.0) -> float:
+    """Minimum backtest length (years) to justify a target annualized Sharpe.
+
+    Bailey & Lopez de Prado (2014). With N trials the expected best in-sample
+    Sharpe of pure noise grows, so the history must grow with it. A search that
+    ignores this cannot prove anything, however good the equity curve looks.
+    """
+    if n_trials < 2:
+        return 0.0
+    if target_sr <= 0:
+        raise ValueError("target_sr must be > 0")
+    a = _N.inv_cdf(1.0 - 1.0 / n_trials)
+    b = _N.inv_cdf(1.0 - 1.0 / (n_trials * math.e))
+    return ((1.0 - EULER_GAMMA) * a + EULER_GAMMA * b) ** 2 / (target_sr ** 2)

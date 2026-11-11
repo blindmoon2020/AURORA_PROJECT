@@ -86,6 +86,12 @@ class StatsTests(unittest.TestCase):
         many = stats.deflated_sharpe_ratio(returns, [0.05 + 0.01 * i for i in range(200)])["dsr"]
         self.assertLess(many, few)
 
+    def test_min_backtest_length_grows_with_trials(self):
+        one = stats.min_backtest_length_years(10)
+        many = stats.min_backtest_length_years(81)
+        self.assertGreater(many, one)
+        self.assertAlmostEqual(stats.min_backtest_length_years(81, 1.0), 6.03, places=2)
+
     def test_psr_is_a_probability(self):
         rng = random.Random(2)
         returns = [rng.gauss(0.0002, 0.003) for _ in range(500)]

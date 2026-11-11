@@ -29,6 +29,9 @@ working tree, `.docx` specs as the source of truth.
 - **[docs/REVIEW.md](docs/REVIEW.md)** — the system reviewed as an engineer, a
   trader and an allocator, benchmarked against institutional practice, with every
   weakness ranked and its fix status. Start here.
+- **[docs/vision/AURORA_VISION_v1.3.md](docs/vision/AURORA_VISION_v1.3.md)** — the
+  current vision, capital doctrine and numeric gates (replaces 35 earlier documents;
+  see `docs/vision/DOCS_AUDIT.md` for why).
 - **[docs/RESEARCH.md](docs/RESEARCH.md)** and **[docs/RESEARCH_DAILY.md](docs/RESEARCH_DAILY.md)** —
   auto-generated research reports on real EURUSD data (1h/730d and 1d/10y).
 
@@ -135,5 +138,5 @@ over with a better-looking curve.
 3. Paper execution adapter, then MT5 behind the same `Broker` protocol, demo first.
 
 **Funding rule, agreed in advance:** out-of-sample profit factor above 1.3 over
-300+ trades and 20+ symbols, deflated Sharpe above 0.95, PBO below 0.2. Below
-that, the strategy is killed rather than tuned.
+300+ trades and 20+ symbols, deflated Sharpe above 0.95, PBO below 0.10, and enough history to satisfy
+MinBTL for the number of trials. Below that, the strategy is killed rather than tuned.

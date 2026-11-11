@@ -180,7 +180,8 @@ Phase D — production discipline:
 
 **Falsifiable success criterion, agreed in advance:** an out-of-sample profit
 factor above 1.3 across at least 300 trades and 20 symbols, with a deflated
-Sharpe above 0.95 and a PBO below 0.2. If a candidate cannot clear that, it is
+Sharpe above 0.95, a PBO below 0.10 (published practice rejects above ~0.05),
+and enough history to satisfy MinBTL for the number of trials tried. If a candidate cannot clear that, it is
 not funded, no matter how good the curve looks.
 
 ---
