@@ -94,6 +94,8 @@ def fetch_yahoo(
     for i, ts in enumerate(ts_list):
         o, h, l, c = (quote.get(k, [None] * len(ts_list))[i]
                       for k in ("open", "high", "low", "close"))
+        vols = quote.get("volume") or []
+        v = vols[i] if i < len(vols) else None
         if None in (o, h, l, c) or min(o, h, l, c) <= 0:
             key = "null_or_nonpositive"
             meta.drop_reasons[key] = meta.drop_reasons.get(key, 0) + 1
@@ -104,7 +106,8 @@ def fetch_yahoo(
             meta.drop_reasons[key] = meta.drop_reasons.get(key, 0) + 1
         try:
             candles.append(Candle(ts=int(ts), open=float(o), high=float(hi),
-                                  low=float(lo), close=float(c)))
+                                  low=float(lo), close=float(c),
+                                  volume=float(v) if v else 0.0))
         except ValueError:
             key = "invalid_bar"
             meta.drop_reasons[key] = meta.drop_reasons.get(key, 0) + 1

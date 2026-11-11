@@ -206,3 +206,11 @@ a short ADR: decision, alternatives, effect on results, rollback.
 Research software. Nothing here is investment advice, and the measured results
 show no proven edge. Trading foreign exchange with leverage can lose more than
 the account holds.
+
+## Decision record
+
+Every decision taken so far, with its reason and its revision, is consolidated in
+[`docs/DECISIONS_LOG.md`](docs/DECISIONS_LOG.md): asset scope (206 instruments across
+9 classes), free versus keyed data sources, the verdict on each third-party site, the
+LLM router policy, the security doctrine, the real cost model, the gates, and the four
+core contracts nothing is allowed to break.
