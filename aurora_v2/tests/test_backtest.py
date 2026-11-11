@@ -49,11 +49,20 @@ class BacktestInvariantTests(unittest.TestCase):
         expected = self.result.metrics.starting_balance + sum(t.pnl for t in self.result.trades)
         self.assertAlmostEqual(self.result.metrics.final_equity, expected, places=6)
 
+    def test_every_trade_points_at_its_decision(self):
+        ids = {r.decision_id for r in self.result.log.records}
+        self.assertTrue(all(t.decision_id for t in self.result.trades))
+        for t in self.result.trades:
+            self.assertIn(t.decision_id, ids)
+        approved_ids = {r.decision_id for r in self.result.log.approved()}
+        for t in self.result.trades:
+            self.assertIn(t.decision_id, approved_ids)
+
     def test_trades_are_well_formed(self):
         for t in self.result.trades:
             self.assertGreater(t.units, 0)
             self.assertIn(t.side, ("long", "short"))
-            self.assertIn(t.exit_reason, ("stop", "target", "end_of_data"))
+            self.assertIn(t.exit_reason, ("stop", "target", "stop_gap", "target_gap", "end_of_data"))
             self.assertGreaterEqual(t.closed_ts, t.opened_ts)
 
     def test_drawdown_is_a_percentage(self):

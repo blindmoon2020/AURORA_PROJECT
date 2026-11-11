@@ -35,6 +35,8 @@ class EmaCross:
     ) -> None:
         if fast >= slow:
             raise ValueError(f"fast ({fast}) must be < slow ({slow})")
+        if fast < 2 or slow < 3:
+            raise ValueError("fast must be >= 2 and slow >= 3")
         if stop_lookback < 1:
             raise ValueError("stop_lookback must be >= 1")
         if rr <= 0:
@@ -48,42 +50,53 @@ class EmaCross:
     def warmup(self) -> int:
         return self.slow + self.stop_lookback + 1
 
-    def evaluate(self, candles: Sequence[Candle]) -> Optional[Signal]:
-        if len(candles) < self.warmup():
-            return None
+    # ---- fast path: one pass over the series ------------------------------
+    def prepare(self, candles: Sequence[Candle]) -> List[Optional[Signal]]:
+        n = len(candles)
+        out: List[Optional[Signal]] = [None] * n
+        if n < self.warmup():
+            return out
         closes = [c.close for c in candles]
         f, s = ema(closes, self.fast), ema(closes, self.slow)
-        i = len(candles) - 1
-        if None in (f[i], s[i], f[i - 1], s[i - 1]):
-            return None
+        look = self.stop_lookback
 
-        crossed_up = f[i - 1] <= s[i - 1] and f[i] > s[i]
-        crossed_down = f[i - 1] >= s[i - 1] and f[i] < s[i]
-        if not (crossed_up or crossed_down):
-            return None
+        for i in range(self.warmup(), n):
+            if None in (f[i], s[i], f[i - 1], s[i - 1]):
+                continue
+            crossed_up = f[i - 1] <= s[i - 1] and f[i] > s[i]
+            crossed_down = f[i - 1] >= s[i - 1] and f[i] < s[i]
+            if not (crossed_up or crossed_down):
+                continue
 
-        last = candles[i]
-        window = candles[i - self.stop_lookback:i]
-        if crossed_up:
-            stop = min(c.low for c in window)
-            if stop >= last.close:
-                return None
-            target = last.close + self.rr * (last.close - stop)
-            reason = (
-                f"EMA{self.fast} crossed above EMA{self.slow} at {last.close:.5f}; "
-                f"stop under {self.stop_lookback}-bar low {stop:.5f}; target {self.rr:g}R"
-            )
-            return Signal(Side.LONG, last.close, stop, target, reason)
+            last = candles[i]
+            window = candles[i - look:i]
+            if crossed_up:
+                stop = min(c.low for c in window)
+                if stop >= last.close:
+                    continue
+                target = last.close + self.rr * (last.close - stop)
+                reason = (
+                    f"EMA{self.fast} crossed above EMA{self.slow} at {last.close:.5f}; "
+                    f"stop under {look}-bar low {stop:.5f}; target {self.rr:g}R"
+                )
+                out[i] = Signal(Side.LONG, last.close, stop, target, reason)
+            else:
+                stop = max(c.high for c in window)
+                if stop <= last.close:
+                    continue
+                target = last.close - self.rr * (stop - last.close)
+                reason = (
+                    f"EMA{self.fast} crossed below EMA{self.slow} at {last.close:.5f}; "
+                    f"stop over {look}-bar high {stop:.5f}; target {self.rr:g}R"
+                )
+                out[i] = Signal(Side.SHORT, last.close, stop, target, reason)
+        return out
 
-        stop = max(c.high for c in window)
-        if stop <= last.close:
+    def evaluate(self, candles: Sequence[Candle]) -> Optional[Signal]:
+        """Single-shot view of the last bar (used by tests and ad hoc calls)."""
+        if not candles:
             return None
-        target = last.close - self.rr * (stop - last.close)
-        reason = (
-            f"EMA{self.fast} crossed below EMA{self.slow} at {last.close:.5f}; "
-            f"stop over {self.stop_lookback}-bar high {stop:.5f}; target {self.rr:g}R"
-        )
-        return Signal(Side.SHORT, last.close, stop, target, reason)
+        return self.prepare(candles)[-1]
 
 
 STRATEGY_TYPES = {

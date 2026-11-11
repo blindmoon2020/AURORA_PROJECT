@@ -23,6 +23,3 @@ packages = [
     "aurora.journal",
     "aurora.backtest",
 ]
-
-[tool.unittest]
-start-dir = "tests"

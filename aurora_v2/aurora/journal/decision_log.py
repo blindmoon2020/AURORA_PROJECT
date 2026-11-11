@@ -6,7 +6,7 @@ that justified it, it was not a decision, it was an accident.
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Iterable, List, Optional
 
@@ -26,6 +26,7 @@ class DecisionRecord:
     approved: bool
     reason: str
     stage: str = "risk"
+    decision_id: str = ""
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), ensure_ascii=False, sort_keys=True)
@@ -44,6 +45,8 @@ class DecisionLog:
     def record(self, rec: DecisionRecord) -> DecisionRecord:
         if not rec.reason or not rec.reason.strip():
             raise ValueError("every decision needs a reason")
+        if not rec.decision_id:
+            rec = replace(rec, decision_id=f"D{len(self.records) + 1:06d}")
         self.records.append(rec)
         if self.path is not None:
             with self.path.open("a", encoding="utf-8") as fh:

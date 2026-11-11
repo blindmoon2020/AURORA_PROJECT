@@ -1,111 +1,139 @@
 # aurora_v2
 
-A small trading core that runs, is tested, and can be measured. It is the replacement
-for `AURORA_PROJECT`, which was frozen as a reference: 1810 files, 580 empty
-`__init__.py`, no README, no requirements, nothing runnable.
+A trading core that runs, is tested, and can be measured — built to replace
+`AURORA_PROJECT`, which was frozen as a reference (1810 files, 580 empty
+`__init__.py`, no README, no requirements, nothing runnable).
 
-This directory is the opposite bet: four ideas from AURORA, implemented once, with
-tests around every one of them.
+The point of this package is not a clever strategy. It is a process that refuses
+to lie: fills where a fill was possible, charges the costs, and penalises itself
+for every parameter it tried.
 
-## The four ideas, and where they live
+```
+63 stdlib tests · zero dependencies · deterministic · Python 3.10+
+```
 
-| Idea from AURORA | Where it is now |
+## The four ideas kept from AURORA
+
+| Idea | Where it lives |
 | --- | --- |
 | Strategy is data, not code | `aurora/strategies/dna.py` + `strategies/*.json` |
-| Risk engine separate from signal engine, size from account risk | `aurora/risk/engine.py` |
+| Risk engine separate from the signal engine, size from account risk | `aurora/risk/engine.py` |
 | Event bus between signal, risk and execution | `aurora/core/events.py` |
 | A decision record for every trade, with the reason | `aurora/journal/decision_log.py` |
 
 Dropped on purpose: phase numbering, per-package `MANIFEST.md`, archives inside the
 working tree, `.docx` specs as the source of truth.
 
+## Read these two documents
+
+- **[docs/REVIEW.md](docs/REVIEW.md)** — the system reviewed as an engineer, a
+  trader and an allocator, benchmarked against institutional practice, with every
+  weakness ranked and its fix status. Start here.
+- **[docs/RESEARCH.md](docs/RESEARCH.md)** and **[docs/RESEARCH_DAILY.md](docs/RESEARCH_DAILY.md)** —
+  auto-generated research reports on real EURUSD data (1h/730d and 1d/10y).
+
+## The result, stated plainly
+
+Walk-forward only: parameters chosen on the past, traded on the block after it,
+81 configurations, 0.2 pip spread, 0.1 pip stop slippage, next-bar-open fills.
+
+| | EURUSD 1h / 2 years | EURUSD 1d / 10 years |
+| --- | --- | --- |
+| out-of-sample trades | 115 | 25 |
+| profit factor | 1.11 | 0.42 |
+| net P&L on 10,000 | +408.13 | −557.56 |
+| Sharpe / max drawdown | 0.36 / 6.86% | −0.63 / 7.85% |
+| p-value | 0.579 | 0.071 |
+| probability of backtest overfitting | 0.27 | 0.50 |
+| deflated Sharpe | 0.000 | 0.000 |
+
+**No edge.** An in-sample sweep of the same data reaches Sharpe 1.52 on the hourly
+series; one walk-forward block later it is a coin flip. The harness is right, the
+premise is wrong. That is the most useful sentence in this repository.
+
 ## Run it
 
-No dependencies. Python 3.10+ and the standard library.
+Standard library only.
 
 ```bash
 cd aurora_v2
-python -m unittest discover -s tests -t . -v      # 42 tests
+python -m unittest discover -s tests -t . -v          # 63 tests
 python scripts/run_backtest.py --data synthetic --candles 5000 --seed 7
 ```
 
-With your own data (MT5 export, TradingView, a broker statement):
+Real data (fetched and cached, with provenance in the report):
+
+```bash
+python scripts/research.py --symbol EURUSD=X --interval 1h --range 730d
+python scripts/research.py --symbol EURUSD=X --interval 1d --range 10y --folds 4 \
+    --out docs/RESEARCH_DAILY.md
+```
+
+Your own CSV (MT5 export, TradingView, broker statement):
 
 ```bash
 python scripts/run_backtest.py --data csv --csv path/to/EURUSD_M5.csv \
     --dna strategies/ema_cross_eurusd.json --out runs/eurusd/decisions.jsonl
 ```
 
-The CSV adapter accepts `ts,open,high,low,close[,volume]` with common header aliases
-(`time`, `date`, `datetime`, `o,h,l,c`, ...) and either epoch or ISO timestamps.
-
 ## Layout
 
 ```
 aurora/
-  core/        Candle, Side, EventBus and the event types
+  core/        Candle, Side, EventBus and event types
   risk/        RiskLimits, RiskEngine, RiskDecision
-  strategies/  strategy protocol, EMA cross baseline, DNA loader
-  data/        synthetic feed (tests) and CSV adapter (real data)
-  execution/   Broker protocol and a paper broker with spread + commission
-  journal/     append-only JSONL decision log
+  strategies/  strategy protocol, fast one-pass EMA cross, DNA loader
+  data/        synthetic fixture, CSV adapter, Yahoo fetcher, data validation
+  execution/   Broker protocol and a paper broker (spread, slippage, gaps)
+  journal/     append-only JSONL decision log with decision ids
   backtest/    runner (data -> signal -> risk -> broker -> log) and metrics
-strategies/    the strategy DNA files; adding a variant is a JSON file, not code
-scripts/       command line entry points
-tests/         stdlib unittest, no pytest needed
+  validation/  walk-forward with embargo, PBO by CSCV
+  stats.py     Sharpe, Sortino, Calmar, t-test, PSR, deflated Sharpe
+strategies/    strategy DNA; a variant is a JSON file, not a code change
+scripts/       run_backtest, research, equity_svg
+docs/          REVIEW.md (the critique) and generated research reports
+tests/         stdlib unittest
 ```
 
-## What the risk engine enforces
+## Execution model (the part that decides the result)
 
-Order matters, and every check returns a reason:
-
-1. kill switch active -> nothing trades until `reset()`
-2. stop on the wrong side of entry -> rejected (`invalid stop`)
-3. daily loss cap reached -> rejected for the rest of the day
-4. `max_open_positions` reached -> rejected
-5. symbol already open -> rejected
-6. notional above `equity * max_leverage` -> rejected (`exposure ceiling`)
-7. size rounds to zero -> rejected
-
-Size always comes from account risk: `units = equity * risk_per_trade_pct / stop_distance`.
-There is no fixed lot anywhere in the codebase.
-
-## Accounting rules (tested, not assumed)
-
-- equity is realized cash; no mark-to-market optimism
-- a bar that touches both stop and target closes at the **stop**
-- commissions are charged on entry and exit and included in trade pnl
+- a signal is generated on the close of bar *i*; the order fills at the **open of bar *i+1***
+- entry pays half the spread, exit pays the other half
+- a bar that gaps through the stop fills **at the open**, not at the stop
+- stop fills take adverse slippage; target fills do not
+- a bar touching both stop and target closes at the **stop**
+- commissions are charged on both legs and are inside trade pnl
 - `final_equity == starting_balance + sum(trade.pnl)` is asserted in the tests
 
-## Baseline numbers, and what they mean
+## Risk rules (in the order they are checked)
 
-On a random walk, a two-EMA cross must come out around break-even. If it does not,
-the harness leaks future data.
+1. kill switch active: nothing trades until a human resets it
+2. total drawdown cap breached: kill switch trips itself
+3. stop on the wrong side of entry: rejected
+4. daily loss cap reached: done for the day
+5. daily trade cap: churn is a cost centre
+6. max open positions / one position per symbol
+7. notional above `equity × max_leverage`
+8. size rounds to zero
 
-```
-signals=35 approved=35  trades=35  win_rate=34.3%  PF=0.99  maxDD=4.12%
-synthetic EURUSD, 5000 hourly bars, seed 7, 0.5% risk per trade
-```
+Size always comes from account risk: `units = equity × risk% / stop_distance`.
+There is no fixed lot anywhere in the codebase, and every rejection carries a
+written reason into the decision log.
 
-That is the honest reading: **no edge, correct plumbing**. Synthetic data cannot
-prove a strategy; it proves the engine stops, sizes and accounts correctly.
+## Known gaps (deliberately documented, not hidden)
 
-Guardrail check with deliberately noisy settings (2% risk, 2% daily cap, 2-bar stops):
+Swap/financing for multi-day holds, portfolio-level correlation, measured
+transaction costs (TCA), broker execution, capacity. Ranked with effort in
+[REVIEW.md §3](docs/REVIEW.md). Nothing on that list is allowed to be papered
+over with a better-looking curve.
 
-```
-signals=288 approved=149 rejected=139
-  107x daily loss cap hit
-   32x exposure ceiling
-```
+## Next
 
-The limits bind before the account is destroyed, which is the behaviour that matters.
+1. Swap cost in the broker, then a portfolio layer with correlation-aware exposure.
+2. A premise with a reason (carry, session liquidity, volatility premium),
+   pre-registered before touching data.
+3. Paper execution adapter, then MT5 behind the same `Broker` protocol, demo first.
 
-## Next steps
-
-1. Real data: one honest baseline backtest on a real EURUSD file (CSV adapter is ready).
-2. Walk-forward split, so parameters are chosen on data the test never sees.
-3. Paper-trading loop: same runner, live clock, positions fed back in.
-4. Broker adapter (MT5 first) behind the `Broker` protocol, paper first, always.
-5. Only then: more strategies, as DNA files, never as engine changes.
-
-Run this on real data before adding a single feature.
+**Funding rule, agreed in advance:** out-of-sample profit factor above 1.3 over
+300+ trades and 20+ symbols, deflated Sharpe above 0.95, PBO below 0.2. Below
+that, the strategy is killed rather than tuned.

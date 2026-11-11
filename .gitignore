@@ -32,6 +32,9 @@ runs/
 .DS_Store
 Thumbs.db
 
-# data files: exports are inputs, not source
+# data files: exports are inputs, not source, except the pinned research sets
 *.csv
 !tests/fixtures/*.csv
+!datasets/*.csv
+!results/*.csv
+data_cache/

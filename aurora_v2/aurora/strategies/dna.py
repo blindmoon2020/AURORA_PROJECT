@@ -15,9 +15,6 @@ from .base import Strategy
 from .ema_cross import STRATEGY_TYPES
 
 REQUIRED_KEYS = ("name", "symbol", "type", "params", "risk")
-AUTHORED_BY = "human"
-
-
 class DnaError(ValueError):
     """Raised when a DNA file cannot be turned into a working strategy."""
 
