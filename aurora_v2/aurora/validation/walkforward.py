@@ -13,10 +13,11 @@ from __future__ import annotations
 
 import itertools
 from dataclasses import dataclass, field, replace
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Callable, Dict, List, Optional, Sequence
 
 from ..backtest.metrics import Metrics, Trade
 from ..backtest.runner import BacktestRun, run_backtest
+from ..execution.paper import PaperBroker
 from ..core.types import Candle
 from ..strategies.dna import StrategyDna
 
@@ -116,6 +117,7 @@ def run_walk_forward(
     min_trades: int = 8,
     starting_balance: float = 10_000.0,
     execution_lag: int = 1,
+    broker_factory: Optional[Callable[[], PaperBroker]] = None,
 ) -> WalkForwardResult:
     candles = list(candles)
     folds = make_folds(len(candles), n_folds, is_fraction, embargo_bars)
@@ -138,6 +140,7 @@ def run_walk_forward(
                 run = run_backtest(
                     is_slice, trial, starting_balance=starting_balance,
                     execution_lag=execution_lag,
+                    broker=broker_factory() if broker_factory else None,
                 )
             except ValueError:
                 continue
@@ -154,7 +157,8 @@ def run_walk_forward(
 
         oos_dna = replace(dna, params={**dna.params, **best_params})
         oos_run = run_backtest(
-            oos_slice, oos_dna, starting_balance=balance, execution_lag=execution_lag
+            oos_slice, oos_dna, starting_balance=balance, execution_lag=execution_lag,
+            broker=broker_factory() if broker_factory else None,
         )
         for trade in oos_run.trades:
             stitched_trades.append(trade)

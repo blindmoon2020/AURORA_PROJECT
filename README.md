@@ -4,10 +4,11 @@ A financial decision platform under construction: it ingests market, macro and
 fundamental data, decides what to buy and what to sell, and records why.
 
 **Read this first:** the working system lives in [`aurora_v2/`](aurora_v2/README.md).
-The other top-level folders (`ARCHIVE/`, `src/`, `src_LEGACY_ARCHIVE/`,
-`tests_LIDOMA_ARCHIVE/`, the `00_CORE`…`16_TEST_ARCHITECTURE` phase folders and
-the `*.docx` specifications) are the **frozen legacy repository**, kept only as a
-reference. They are not built, tested or maintained. See
+The whole old repository now sits in [`legacy/`](legacy/): `ARCHIVE/`, `src/`,
+`src_LEGACY_ARCHIVE/`, `tests_LIDOMA_ARCHIVE/`, the `00_CORE`…`16_TEST_ARCHITECTURE`
+phase folders and the `*.docx` specifications. It is **frozen reference**, built by
+no test, imported by no module. Moved, not deleted, so nothing is lost and the root
+of the repository is readable again. They are not built, tested or maintained. See
 [`aurora_v2/docs/vision/DOCS_AUDIT.md`](aurora_v2/docs/vision/DOCS_AUDIT.md).
 
 ## Status
@@ -31,6 +32,8 @@ starting point, not a marketing problem.
 | [`aurora_v2/docs/vision/AURORA_VISION_v1.3.md`](aurora_v2/docs/vision/AURORA_VISION_v1.3.md) | vision, scope (platform, not bot), capital doctrine, gates V0–V4 |
 | [`aurora_v2/docs/REVIEW.md`](aurora_v2/docs/REVIEW.md) | institutional review: every weakness ranked with its fix status, verified vs unverified claims |
 | [`aurora_v2/docs/RESEARCH.md`](aurora_v2/docs/RESEARCH.md) | the measured research report, with trade-level detail |
+| [`aurora_v2/docs/ARCHITECTURE_MULTIASSET.md`](aurora_v2/docs/ARCHITECTURE_MULTIASSET.md) | the full asset universe (equities, bonds, ETFs, commodities, crypto, Iran), per-class data sources, and the access constraints that are real |
+| [`aurora_v2/docs/RESEARCH_INSTITUTIONAL.md`](aurora_v2/docs/RESEARCH_INSTITUTIONAL.md) | institutional findings and what they changed: verified costs are 0.8-1.4 pip, not 0.2, and a backtest can never be presented as a track record |
 
 Word versions of all documents: [`aurora_v2/exports/`](aurora_v2/exports/).
 
