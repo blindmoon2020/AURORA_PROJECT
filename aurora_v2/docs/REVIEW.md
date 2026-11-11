@@ -90,7 +90,7 @@ because their process refuses to let a good story survive bad numbers.
 
 | Practice | Institutional standard | Aurora v0.2 | Gap |
 | --- | --- | --- | --- |
-| Research vs validation | Model validation is independent of the people who built the model; findings are documented and tracked (Fed/OCC model risk guidance, SR 11-7) | Same person does both; but the checks are automated and reproducible | Separation of roles, formal model inventory, written findings log |
+| Research vs validation | Model validation is independent of the people who built the model; findings are documented and tracked (US supervisory model-risk guidance: SR 11-7, superseded in April 2026 by SR 26-2) | Same person does both; but the checks are automated and reproducible | Separation of roles, formal model inventory, written findings log |
 | Model documentation | Specification, assumptions, limitations, and known failure modes recorded per model | `README`, this review, decision log with reasons | A one-page model card per strategy |
 | Overfitting controls | Multiple-testing correction; walk-forward or purged CV; a minimum t-statistic before a factor is believed (the "t > 3" convention from Harvey, Liu & Zhu) | Walk-forward + embargo, PBO, DSR, PSR, t-stat, CI | More history and more symbols so t-stat has power |
 | Cost modelling | Pre-trade cost estimate, post-trade TCA, measured slippage distribution by session and volatility | Constant spread + slippage, gap handling | Measured, session-dependent costs from real fills |
@@ -103,8 +103,10 @@ because their process refuses to let a good story survive bad numbers.
 
 Honest note on the big houses: Vanguard's public reputation rests on low-cost,
 long-horizon, largely index-and-factor discipline rather than clever intraday
-signals; BlackRock's Aladdin is documented as a risk-and-portfolio platform that
-runs pre-trade compliance and scenario analysis across many portfolios. Neither
+signals; BlackRock's Aladdin is publicly documented as a risk-and-portfolio platform
+spanning risk analytics, portfolio construction and scenario analysis; its
+pre-trade compliance tooling is widely described but I could not confirm it from
+a first-party source, so treat that part as unverified. Neither
 sells a secret indicator. The transferable lesson for a private account is
 unglamorous: **cost discipline, position-level risk control, and a validation
 process that can say no.** That is what this codebase now has, and it is why it
@@ -180,7 +182,7 @@ Phase D — production discipline:
 
 **Falsifiable success criterion, agreed in advance:** an out-of-sample profit
 factor above 1.3 across at least 300 trades and 20 symbols, with a deflated
-Sharpe above 0.95, a PBO below 0.10 (published practice rejects above ~0.05),
+Sharpe above 0.95, a PBO below 0.10 (published practice rejects above ~0.05; 0.10 is our working ceiling before that hard line),
 and enough history to satisfy MinBTL for the number of trials tried. If a candidate cannot clear that, it is
 not funded, no matter how good the curve looks.
 
@@ -196,3 +198,38 @@ python scripts/research.py --symbol EURUSD=X --interval 1d --range 10y --folds 4
     --out docs/RESEARCH_DAILY.md
 python scripts/equity_svg.py results/EURUSDX_1h_730d_oos_equity.csv results/eurusd_1h_oos.svg
 ```
+
+---
+
+## 9. Sources and verification status
+
+Written honestly, because an investor will ask which claims can be checked.
+
+**Verified against a first-party or primary source**
+- Deflated Sharpe Ratio and Probabilistic Sharpe Ratio formulas (Bailey & López
+  de Prado 2012, 2014), including the `(T-1)` exponent and the Euler-Mascheroni
+  term. Implemented in `aurora/stats.py`, checked against published examples.
+- Probability of Backtest Overfitting by CSCV (Bailey, Borwein, López de Prado,
+  Zhu 2014); the paper's rejection level is **0.05**, which is why section 7 uses
+  0.10 as a working ceiling rather than an invented 0.2.
+- Minimum Backtest Length: with 81 trials and a target annualized Sharpe of 1.0,
+  ~6 years of history are required. Our hourly series is 2.83 years, so that
+  sweep could not prove an edge however it looked. Implemented as
+  `stats.min_backtest_length_years()`.
+- Multiple-testing convention of requiring t > 3 before believing a new factor
+  (Harvey, Liu & Zhu 2016).
+- US model-risk guidance: SR 11-7 (2011), superseded in **April 2026 by SR 26-2**.
+  "Three lines of defense" is industry shorthand, not the guidance's own wording;
+  its actual components are conceptual soundness, ongoing monitoring, and
+  outcomes analysis.
+
+**Unverified — do not repeat as fact**
+- Vanguard's internal quantitative process and factor construction (public
+  descriptions exist, internal detail does not).
+- Whether Aladdin performs pre-trade compliance checks as a core function.
+- Typical EURUSD spread by session and slippage distribution around news: these
+  vary by venue and must be measured on the actual broker account, not quoted.
+- Specific provisions of the FX Global Code as they apply to a retail account.
+
+**This document's own scope:** it reviews code and measured results. It is not
+an audit, and it is not investment advice.
