@@ -60,3 +60,8 @@ forced DSR to 0.000 in all four reports. The unit error is fixed in
 scripts/research.py, v1_momentum.py, v1_carry_meanrev.py and v1_carry_em.py.
 Earlier "DSR 0.000" lines were partly an artefact of that bug, not only a
 property of the strategies.
+
+---
+
+> **تصحیح (۲۰۲۶-۱۱-۱۲):** اعداد این سند با جهت معکوس و بدون جزء بهره محاسبه شده‌اند.
+> نتیجه معتبر نیست. نسخه صحیح در `V1_CARRY_CORRECTED.md` است و حکم آن **رد** است.

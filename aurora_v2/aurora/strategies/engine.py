@@ -18,7 +18,8 @@ from ..stats import max_drawdown, sharpe, stdev
 class PositionRun:
     returns: List[float]
     equity: List[float]
-    flips: int
+    flips: int          # any change of size, including a volatility rescale
+    sign_flips: int     # direction changes only: the ones that carry a real cost
     sharpe: float
     max_dd_pct: float
     total_return_pct: float
@@ -61,11 +62,15 @@ def run_positions(
             scaled.append(max(-max_leverage, min(max_leverage, p * scale)))
         raw = scaled
 
-    out, flips, prev = [], 0, 0.0
+    out, flips, sign_flips, prev, prev_sign = [], 0, 0, 0.0, 0
     for i, p in enumerate(raw):
         turnover = abs(p - prev)
         if turnover > 1e-12:
             flips += 1
+        sign = (1 if p > 0 else (-1 if p < 0 else 0))
+        if sign != prev_sign:
+            sign_flips += 1
+            prev_sign = sign
         out.append(p * rets[i] - turnover * cost_rate)
         prev = p
 
@@ -77,6 +82,7 @@ def run_positions(
         returns=out,
         equity=curve,
         flips=flips,
+        sign_flips=sign_flips,
         sharpe=sharpe(out, 252),
         max_dd_pct=max_drawdown(curve)[1],
         total_return_pct=(curve[-1] - 1.0) * 100.0,
