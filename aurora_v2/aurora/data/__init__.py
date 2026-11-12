@@ -8,3 +8,4 @@ __all__ = [
     "clean_candles", "DataReport", "fetch_yahoo", "FetchMeta", "YahooError",
 ]
 from .fred import MacroPoint, FredError, curve_snapshot, fetch_series, latest
+from . import alphavantage  # noqa: F401
