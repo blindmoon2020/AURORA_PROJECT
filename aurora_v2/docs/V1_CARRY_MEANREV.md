@@ -17,7 +17,7 @@ Rules frozen in `docs/DECISIONS_LOG.md` before the run. Costs by class: fx 8bp, 
 
 - Sharpe -0.21
 - t-stat -0.93, p-value 0.350
-- deflated Sharpe (trials=6): 0.000
+- deflated Sharpe (trials=6): 0.054
 
 ## H3 · mean reversion after an extreme move
 
@@ -43,7 +43,7 @@ Pre-registered window was intraday after the session open. Intraday history on t
 
 - Sharpe -0.52
 - t-stat -1.88, p-value 0.060
-- deflated Sharpe (trials=5): 0.000
+- deflated Sharpe (trials=5): 0.001
 
 ## Reading
 

@@ -94,7 +94,10 @@ def main(argv=None) -> int:
         sweep.append((params, run))
     sweep.sort(key=lambda kv: kv[1].metrics.sharpe, reverse=True)
     best_params, best_run = sweep[0]
-    trial_srs = [r.metrics.sharpe for _, r in sweep]
+    # DSR compares per-period Sharpes; Metrics.sharpe is annualised. Passing an
+    # annualised trial set inflates the expected-maximum and forces DSR to zero.
+    _ppy = getattr(sweep[0][1].metrics, "periods_per_year", 252) or 252
+    trial_srs = [r.metrics.sharpe / (_ppy ** 0.5) for _, r in sweep]
 
     pbo = cscv_pbo([r.metrics.bar_returns for _, r in sweep], n_splits=8)
 

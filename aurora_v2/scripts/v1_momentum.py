@@ -6,6 +6,7 @@ Writes docs/V1_MOMENTUM.md and prints the table.
 """
 from __future__ import annotations
 
+import math
 import sys
 import time
 from pathlib import Path
@@ -59,7 +60,7 @@ def main() -> int:
     p_dd = max_drawdown(curve)[1] / 100.0
     t = t_stat(portfolio)
     p = t_p_value(t, max(2, len(portfolio) - 1))
-    trial_srs = [r.sharpe for _, _, r in rows]
+    trial_srs = [r.sharpe / math.sqrt(252) for _, _, r in rows]
     dsr = deflated_sharpe_ratio(portfolio, trial_srs)
 
     lines = ["# V1 · H2 time-series momentum — measured result", "",

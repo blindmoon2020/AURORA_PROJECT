@@ -5,6 +5,7 @@ cannot honour a rule, the report says so instead of quietly redefining it.
 """
 from __future__ import annotations
 
+import math
 import sys
 import time
 from datetime import datetime, timezone
@@ -71,7 +72,7 @@ def verdict(runs: dict[str, PositionRun], label: str, lines: list[str]) -> list[
     port = combine(streams)
     t = t_stat(port)
     p = t_p_value(t, max(2, len(port) - 1))
-    dsr_map = deflated_sharpe_ratio(port, [r.sharpe for r in runs.values()])
+    dsr_map = deflated_sharpe_ratio(port, [r.sharpe / math.sqrt(252) for r in runs.values()])
     dsr = dsr_map.get("dsr", 0.0)
     from aurora.stats import sharpe
     lines += ["", f"**{label} portfolio ({len(runs)} markets)**", "",

@@ -25,6 +25,6 @@ volatility target 10%, max 3x, costs charged on every flip.
 
 - Sharpe 0.30, Sortino 0.42, max drawdown 13.6%
 - t-stat 1.02, p-value 0.306
-- deflated Sharpe (trials=15): 0.000 (probability the true Sharpe exceeds what the best of 15 tries would give by chance)
+- deflated Sharpe (trials=15): 0.299 (probability the true Sharpe exceeds what the best of 15 tries would give by chance)
 
 Skipped: XAG/USD (HTTP 404 for time_series)
