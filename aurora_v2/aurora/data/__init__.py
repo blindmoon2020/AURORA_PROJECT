@@ -9,3 +9,4 @@ __all__ = [
 ]
 from .fred import MacroPoint, FredError, curve_snapshot, fetch_series, latest
 from . import alphavantage  # noqa: F401
+from . import tiingo  # noqa: F401
