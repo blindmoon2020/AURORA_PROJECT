@@ -7,3 +7,4 @@ __all__ = [
     "load_csv", "write_csv", "CsvFeedError", "synthetic_candles",
     "clean_candles", "DataReport", "fetch_yahoo", "FetchMeta", "YahooError",
 ]
+from .fred import MacroPoint, FredError, curve_snapshot, fetch_series, latest
