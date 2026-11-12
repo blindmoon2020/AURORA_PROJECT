@@ -59,6 +59,12 @@ class SnapshotTests(unittest.TestCase):
 
 
 class ErrorMappingTests(unittest.TestCase):
+    def setUp(self):
+        # CI has no secret: the key must be irrelevant to what this class proves.
+        patcher = mock.patch.object(fmp, "_key", return_value="test-key")
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def _raise(self, code):
         err = urllib.error.HTTPError("u", code, "x", {}, None)
         with mock.patch("urllib.request.urlopen", side_effect=err):
@@ -79,8 +85,16 @@ class ErrorMappingTests(unittest.TestCase):
             self._raise(429)
         self.assertIn("rate limit", str(ctx.exception))
 
+
+
+class KeyTests(unittest.TestCase):
     def test_missing_key_raises(self):
         with mock.patch.dict(os.environ, {"FMP_API_KEY": ""}, clear=False):
+            with self.assertRaises(fmp.FmpError):
+                fmp._key()
+
+    def test_key_is_required_not_optional(self):
+        with mock.patch.dict(os.environ, {"FMP_API_KEY": "  "}, clear=False):
             with self.assertRaises(fmp.FmpError):
                 fmp._key()
 
