@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
-from ..core.types import Candle
+from ..core.types import Candle, candle
 
 BASE = "https://api.twelvedata.com"
 DEFAULT_CACHE = Path("data_cache") / "twelvedata"
@@ -89,7 +89,7 @@ def parse_time_series(payload: dict) -> List[Candle]:
             volume = float(vol) if vol not in (None, "") else 0.0
         except (TypeError, ValueError):
             volume = 0.0
-        candles.append(Candle(ts=ts, open=o, high=h, low=l, close=c, volume=volume))
+        candles.append(candle(ts=ts, open=o, high=h, low=l, close=c, volume=volume))
 
     candles.sort(key=lambda c: c.ts)
     return candles

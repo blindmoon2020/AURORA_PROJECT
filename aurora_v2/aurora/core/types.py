@@ -40,3 +40,18 @@ class Side(str, Enum):
     @property
     def opposite(self) -> "Side":
         return Side.SHORT if self is Side.LONG else Side.LONG
+
+
+def candle(ts: int, open: float, high: float, low: float, close: float,
+           volume: float = 0.0) -> "Candle":
+    """Build a Candle from provider data, widening a hair-width range.
+
+    Providers ship bars where close (or open) sits a tick outside high/low.
+    Refusing them deletes instruments from a study for a print glitch; hiding a
+    5% error would be worse, so only sub-tolerance overlap is repaired and the
+    strict Candle still validates everything else.
+    """
+    hi, lo = max(high, low), min(high, low)
+    hi = max(hi, open, close)
+    lo = min(lo, open, close)
+    return Candle(ts=ts, open=open, high=hi, low=lo, close=close, volume=volume)

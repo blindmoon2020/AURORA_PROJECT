@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from statistics import median
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from ..core.types import Candle
 
@@ -66,6 +66,30 @@ def _is_market_closed(ts: int, profile: str) -> bool:
     return False
 
 
+OHLC_TOLERANCE = 0.005   # 50bp: repair a print glitch, never hide a 5% error
+
+
+def _repair(c: Candle) -> Optional[Candle]:
+    """Keep a bar whose close sits a hair outside high/low by widening the range.
+
+    Both Twelve Data and Yahoo ship such prints. Dropping them is worse than the
+    glitch itself: one bad tick upstream should not delete a whole instrument.
+    """
+    hi, lo, close = c.high, c.low, c.close
+    if hi < lo:
+        hi, lo = lo, hi
+    if lo <= close <= hi:
+        if (hi, lo) == (c.high, c.low):
+            return c
+        return Candle(ts=c.ts, open=c.open, high=hi, low=lo, close=c.close,
+                      volume=getattr(c, "volume", 0.0))
+    ref = max(abs(hi), abs(lo), 1e-12)
+    if abs(close - (hi if close > hi else lo)) / ref <= OHLC_TOLERANCE:
+        return Candle(ts=c.ts, open=c.open, high=max(hi, close), low=min(lo, close),
+                      close=c.close, volume=getattr(c, "volume", 0.0))
+    return None
+
+
 def clean_candles(
     candles: Sequence[Candle], profile: str = "fx"
 ) -> tuple[List[Candle], DataReport]:
@@ -88,7 +112,12 @@ def clean_candles(
         if c.high == c.low:
             report.zero_range += 1
             continue
-        cleaned.append(c)
+        fixed = _repair(c)
+        if fixed is None:
+            report.issues.setdefault("ohlc_inconsistent", 0)
+            report.issues["ohlc_inconsistent"] += 1
+            continue
+        cleaned.append(fixed)
         seen.add(c.ts)
         last_ts = c.ts
 
