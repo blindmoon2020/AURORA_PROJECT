@@ -19,6 +19,7 @@ from pathlib import Path
 from statistics import median
 from typing import List, Optional, Sequence
 
+from ..execution.costs import is_triple_swap_day
 from ..core.events import (
     EventBus,
     ExitEvent,
@@ -51,6 +52,7 @@ class OpenPosition:
     entry_commission: float
     risk_money: float
     decision_id: str = ""
+    swap_accrued: float = 0.0
 
 
 @dataclass
@@ -115,7 +117,7 @@ def _close(
     )
     gross = (fill.price - pos.entry) * pos.side.sign * pos.units
     broker.balance += gross - fill.commission
-    pnl = gross - fill.commission - pos.entry_commission
+    pnl = gross - fill.commission - pos.entry_commission - pos.swap_accrued
     trade = Trade(
         symbol=pos.symbol,
         side=pos.side.value,
@@ -184,7 +186,15 @@ def run_backtest(
         day = current_day
         bus.publish(MarketEvent(ts=candle.ts, symbol=dna.symbol, candle=candle))
 
-        # 1. exits on this bar
+        # 1. carry: charge swap for the time this position was actually held
+        if pos is not None and broker.swap is not None and i > 0:
+            elapsed_days = (candle.ts - candles[i - 1].ts) / 86_400.0
+            if elapsed_days > 0:
+                multiplier = 3.0 if is_triple_swap_day(candles[i - 1].ts) else 1.0
+                pos.swap_accrued += broker.charge_swap(
+                    pos.symbol, pos.side, pos.units, pos.entry, elapsed_days * multiplier)
+
+        # 2. exits on this bar
         if pos is not None:
             hit = _exit_for(pos, candle)
             if hit is not None:
