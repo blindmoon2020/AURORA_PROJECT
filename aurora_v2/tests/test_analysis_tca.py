@@ -48,9 +48,13 @@ class CapacityTests(unittest.TestCase):
 
 class ExposureTests(unittest.TestCase):
     def test_pure_market_beta_is_one(self):
-        e = factor_exposure([0.01] * 60, [0.01] * 60)
+        # a constant series has zero variance, so R2 is undefined and float
+        # summation order decides the answer: use a series that actually varies
+        market = [0.01, -0.01] * 30
+        e = factor_exposure(market, market)
         self.assertAlmostEqual(e.market, 1.0, places=6)
         self.assertAlmostEqual(e.r_squared, 1.0, places=6)
+        self.assertLess(e.residual_vol, 1e-9)
 
     def test_zero_beta_book_is_detected(self):
         e = factor_exposure([0.0] * 60, [0.01, -0.01] * 30)
