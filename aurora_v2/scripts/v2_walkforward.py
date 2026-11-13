@@ -22,7 +22,13 @@ UNIVERSE = [x.strip() for x in os.environ.get(
     "PG,WMT,CAT,GE,F").split(",") if x.strip()]
 BENCHMARK = "SPY"
 COST = 0.0010
-CONFIGS = [(w, n) for w in (0.0, 0.3, 0.5, 0.7, 1.0) for n in (3, 5, 8)]
+CONFIGS = [(v, g, n) for v in (0.0, 0.2, 0.4, 0.6) for g in (0.0, 0.2, 0.4)
+           for n in (3, 5, 8) if v + g <= 0.8]
+
+
+def _as_ts(day: str) -> int:
+    from datetime import datetime, timezone
+    return int(datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
 
 
 def load():
@@ -68,22 +74,32 @@ def monthly_points(prices, filings):
             past = [t for t in grid[max(0, i - 252):i] if t in close[sym]]
             if len(past) < 100:
                 continue
+            older = [f for f in filings[sym]
+                     if _as_ts(f["filing_date"]) <= ts - 400 * 86400]
+            growth = 0.0
+            if older:
+                prev_eps = max(older, key=lambda f: f["filing_date"])["eps"]
+                if prev_eps > 0:
+                    growth = row["eps"] / prev_eps - 1.0
             scores[sym] = {"value": 1.0 / pe,
                            "trend": close[sym][ts] / close[sym][past[0]] - 1.0,
+                           "growth": growth,
                            "fwd": close[sym][nxt] / close[sym][ts] - 1.0}
         if len(scores) >= 4:
             rows.append((ts, scores))
     return rows, close, daily, grid
 
 
-def config_series(rows, value_weight, top_n):
+def config_series(rows, value_weight, growth_weight, top_n):
     """Monthly returns of one configuration across the whole history."""
     out, held = [], []
     for _, scores in rows:
         vz = zscore({s: v["value"] for s, v in scores.items()})
         tz = zscore({s: v["trend"] for s, v in scores.items()})
-        blended = {s: value_weight * vz.get(s, 0.0) + (1 - value_weight) * tz.get(s, 0.0)
-                   for s in scores}
+        gz = zscore({s: v["growth"] for s, v in scores.items()})
+        trend_w = max(0.0, 1.0 - value_weight - growth_weight)
+        blended = {s: value_weight * vz.get(s, 0.0) + growth_weight * gz.get(s, 0.0)
+                   + trend_w * tz.get(s, 0.0) for s in scores}
         picked = sorted(blended, key=blended.get, reverse=True)[:top_n]
         turnover = len(set(picked) ^ set(held)) / max(1, 2 * top_n)
         if not picked:
@@ -101,21 +117,29 @@ def main():
     if len(rows) < 40:
         print(f"not enough history: {len(rows)} rebalances")
         return
-    series = {c: config_series(rows, c[0], c[1]) for c in CONFIGS}
+    series = {c: config_series(rows, c[0], c[1], c[2]) for c in CONFIGS}
 
     # walk-forward: 36-month training, 12-month test, rolled forward
-    oos, picks, train_n, test_n = [], [], 36, 12
-    start = train_n
-    while start + test_n <= len(rows):
-        best, best_sr = None, -9.9
-        for cfg, s in series.items():
-            window = s[start - train_n:start]
-            sr = sharpe(window, 12) if len(window) > 6 else -9.9
-            if sr > best_sr:
-                best, best_sr = cfg, sr
-        picks.append((rows[start][0], best))
-        oos += series[best][start:start + test_n]
-        start += test_n
+    def walk_forward(pool):
+        oos, picks, train_n, test_n = [], [], 36, 12
+        start = train_n
+        while start + test_n <= len(rows):
+            best, best_sr = None, -9.9
+            for cfg in pool:
+                window = series[cfg][start - train_n:start]
+                sr = sharpe(window, 12) if len(window) > 6 else -9.9
+                if sr > best_sr:
+                    best, best_sr = cfg, sr
+            picks.append((rows[start][0], best))
+            oos += series[best][start:start + test_n]
+            start += test_n
+        return oos, picks
+
+    oos, picks = walk_forward(list(series))
+    # same procedure with the growth factor switched off: does the gain come from
+    # the third factor, or merely from having more configurations to choose from?
+    oos_nogrowth, _ = walk_forward([c for c in series if c[1] == 0.0])
+    train_n = 36
 
     curve, eq = [1.0], 1.0
     for r in oos:
@@ -152,16 +176,21 @@ def main():
         counts[cfg] = counts.get(cfg, 0) + 1
     lines += ["", "**پارامترهای انتخاب‌شده در هر دوره** (وزن ارزش، تعداد سهم):", ""]
     for cfg, n in sorted(counts.items(), key=lambda kv: -kv[1]):
-        lines.append(f"- وزن ارزش {cfg[0]:.1f}، {cfg[1]} سهم: {n} دوره")
-    lines += ["", "## با و بدون حفاظ ریسک (همان دوره بیرون‌نمونه)", "",
-              "| نسخه | شارپ | حداکثر افت ٪ | بازده کل ٪ |", "| --- | --- | --- | --- |"]
-    for name, rets in variants.items():
+        lines.append(f"- ارزش {cfg[0]:.1f}، رشد {cfg[1]:.1f}، {cfg[2]} سهم: {n} دوره")
+    lines += ["", "## اثر عامل رشد (همه بیرون‌نمونه)", "",
+              "| ترکیب | شارپ | حداکثر افت ٪ |", "| --- | --- | --- |"]
+    for label, rets, pool in (("ارزش + روند", oos_nogrowth,
+                               len([c for c in series if c[1] == 0.0])),
+                              ("ارزش + روند + رشد", oos,
+                               len(series))):
         c, e = [1.0], 1.0
         for r in rets:
             e *= 1 + r
             c.append(e)
-        lines.append(f"| {name} | {sharpe(rets, 12):.2f} | {max_drawdown(c)[1]:.1f} | "
-                     f"{(c[-1] - 1) * 100:+.0f} |")
+        lines.append(f"| {label} ({pool} ترکیب) | {sharpe(rets, 12):.2f} | "
+                     f"{max_drawdown(c)[1]:.1f} |")
+    lines += ["", "## با و بدون حفاظ ریسک (همان دوره بیرون‌نمونه)", "",
+              "| نسخه | شارپ | حداکثر افت ٪ | بازده کل ٪ |", "| --- | --- | --- | --- |"]
     for name, rets in variants.items():
         c, e = [1.0], 1.0
         for r in rets:
