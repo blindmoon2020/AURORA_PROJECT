@@ -4,6 +4,7 @@ Earnings yield is computed from the last filing that was public on the rebalance
 date, never the latest one. That single rule is what separates a backtest from a
 story: without it, every 2026 report would quietly inform 2015 decisions.
 """
+import os
 import sys
 from pathlib import Path
 
@@ -14,9 +15,12 @@ from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 from aurora.stats import max_drawdown, sharpe
 
-UNIVERSE = ["AAPL", "MSFT", "JNJ", "PG", "XOM", "JPM", "KO", "WMT", "CAT", "IBM"]
+_DEFAULT = ["AAPL", "MSFT", "JNJ", "PG", "XOM", "JPM", "KO", "WMT", "CAT", "IBM"]
+# the universe and book size are arguments, so a result can be re-tested without
+# editing the file that produced it
+UNIVERSE = [x.strip() for x in os.environ.get("AURORA_UNIVERSE", ",".join(_DEFAULT)).split(",") if x.strip()]
 BENCHMARK = "SPY"
-TOP_N = 3
+TOP_N = int(os.environ.get("AURORA_TOP_N", "3"))
 COST = 0.0010          # 10bp round trip on a US large cap
 
 
