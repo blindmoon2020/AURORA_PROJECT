@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from aurora.data import edgar, twelvedata
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
+from aurora.portfolio.overlay import trend_brake, vol_target
 from aurora.stats import max_drawdown, sharpe
 
 UNIVERSE = [x.strip() for x in os.environ.get(
@@ -123,6 +124,13 @@ def main():
     spy = [close[BENCHMARK][grid[i]] / close[BENCHMARK][grid[i - 1]] - 1.0
            for i in range(1, len(grid))]
     oos_years = len(oos) / 12.0
+    spy_oos = [close[BENCHMARK][rows[i][0]] / close[BENCHMARK][rows[i - 1][0]] - 1.0
+               for i in range(train_n, len(rows))]
+    variants = {"raw (no overlay)": oos,
+                "vol target 12%": vol_target(oos, target=0.12, window=6)}
+    n = min(len(oos), len(spy_oos))
+    variants["vol target + trend brake"] = trend_brake(variants["vol target 12%"][:n],
+                                                       spy_oos[:n], window=10)
     lines = ["# V2 · آزمون walk-forward روی ترکیب ارزش و روند", "",
              "**ویرایش:** ۱.۰ · **تاریخ:** ۲۰۲۶-۱۱-۱۳", "",
              f"جهان: {len(filings)} سهم · {len(rows)} بازتوزین ماهانه · "
@@ -131,7 +139,7 @@ def main():
              "| --- | --- | --- | --- |"]
     best_insample = max(series.values(), key=lambda s: sharpe(s, 12))
     lines.append(f"| شارپ | {sharpe(best_insample, 12):.2f} | {sharpe(oos, 12):.2f} | "
-                 f"{sharpe(spy, 12):.2f} |")
+                 f"{sharpe(spy_oos, 12):.2f} |")
     insample_curve, e = [1.0], 1.0
     for r in best_insample:
         e *= 1 + r
@@ -145,9 +153,24 @@ def main():
     lines += ["", "**پارامترهای انتخاب‌شده در هر دوره** (وزن ارزش، تعداد سهم):", ""]
     for cfg, n in sorted(counts.items(), key=lambda kv: -kv[1]):
         lines.append(f"- وزن ارزش {cfg[0]:.1f}، {cfg[1]} سهم: {n} دوره")
+    lines += ["", "## با و بدون حفاظ ریسک (همان دوره بیرون‌نمونه)", "",
+              "| نسخه | شارپ | حداکثر افت ٪ | بازده کل ٪ |", "| --- | --- | --- | --- |"]
+    for name, rets in variants.items():
+        c, e = [1.0], 1.0
+        for r in rets:
+            e *= 1 + r
+            c.append(e)
+        lines.append(f"| {name} | {sharpe(rets, 12):.2f} | {max_drawdown(c)[1]:.1f} | "
+                     f"{(c[-1] - 1) * 100:+.0f} |")
+    for name, rets in variants.items():
+        c, e = [1.0], 1.0
+        for r in rets:
+            e *= 1 + r
+            c.append(e)
+        lines.append(f"| {name} | {sharpe(rets, 12):.2f} | {max_drawdown(c)[1]:.1f} | "
+                     f"{(c[-1] - 1) * 100:+.0f} |")
     Path("docs/V2_WALKFORWARD.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
-
 
 if __name__ == "__main__":
     main()
