@@ -21,6 +21,8 @@ import os
 import time
 import urllib.error
 import urllib.parse
+
+from ..net import throttle as throttle_mod
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -95,18 +97,39 @@ def parse_time_series(payload: dict) -> List[Candle]:
     return candles
 
 
+_OPENER = None      # tests swap this; production uses urllib
+
+
 def _get(path: str, params: Dict[str, str]) -> dict:
     params = dict(params)
     params["apikey"] = _api_key()
     url = f"{BASE}/{path}?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={"User-Agent": "aurora-v2/0.3"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as fh:
-            return json.loads(fh.read().decode())
-    except urllib.error.HTTPError as exc:
-        raise TwelveDataError(f"HTTP {exc.code} for {path}") from exc
-    except urllib.error.URLError as exc:
-        raise TwelveDataError(f"network error for {path}: {exc.reason}") from exc
+    opener = _OPENER or (lambda r, timeout: urllib.request.urlopen(r, timeout=timeout))
+
+    for attempt in range(throttle_mod.MAX_ATTEMPTS):
+        throttle_mod.throttle()
+        try:
+            with opener(req, timeout=30) as fh:
+                return json.loads(fh.read().decode())
+        except urllib.error.HTTPError as exc:
+            # 429 means "wait your turn", 5xx means "try again"; both are queued
+            if exc.code == 429 or 500 <= exc.code < 600:
+                if attempt == throttle_mod.MAX_ATTEMPTS - 1:
+                    raise TwelveDataError(f"HTTP {exc.code} for {path} after "
+                                          f"{throttle_mod.MAX_ATTEMPTS} attempts") from exc
+                retry_after = None
+                try:
+                    retry_after = float(exc.headers.get("Retry-After", ""))
+                except (TypeError, ValueError):
+                    retry_after = None
+                throttle_mod._sleep(throttle_mod.retry_delay(attempt, retry_after))
+                continue
+            raise TwelveDataError(f"HTTP {exc.code} for {path}") from exc
+        except urllib.error.URLError as exc:
+            raise TwelveDataError(f"network error for {path}: {exc.reason}") from exc
+
+    raise TwelveDataError(f"{path}: retries exhausted")
 
 
 def fetch_time_series(
