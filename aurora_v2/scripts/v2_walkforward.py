@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from aurora.data import edgar, twelvedata
+from aurora.data import edgar, fetch_yahoo, twelvedata
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 from aurora.portfolio.overlay import trend_brake, vol_target
@@ -35,7 +35,10 @@ def load():
     prices, filings = {}, {}
     for sym in UNIVERSE + [BENCHMARK]:
         try:
-            candles, _ = twelvedata.fetch_time_series(sym, "1d", outputsize=5000)
+            if os.environ.get("AURORA_PRICE_SOURCE") == "yahoo":
+                candles, _ = fetch_yahoo(sym, "1d", "20y", cache_dir="data_cache")
+            else:
+                candles, _ = twelvedata.fetch_time_series(sym, "1d", outputsize=5000)
         except Exception:
             continue
         prices[sym] = candles
