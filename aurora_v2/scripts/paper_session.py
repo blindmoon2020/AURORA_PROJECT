@@ -19,8 +19,9 @@ from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
 from aurora.data import fetch_yahoo
+from aurora.portfolio.product import build_report, markdown, screen_orders
 from aurora.strategies.cross_asset import (CrossAssetRules, momentum, realized_vol,
-                                           sized_weights)
+                                           sized_weights, sleeve_series)
 from aurora import resilience
 from aurora.data.filings import freshness, guard_no_lookahead
 from aurora.signals.factors import zscore
@@ -30,6 +31,7 @@ import v2_walkforward as wf
 BOOK = Path("journal/paper_book.json")
 SLEEVE_FILE = Path("journal/sleeve_cross.json")
 SLEEVE_SHARE = 0.30          # frozen before the first sleeve session, not after
+REPORT_CAPITAL = 100_000.0   # the book is unit-normalised; cost needs a notional to size
 CROSS_BASKET = ["SPY", "EFA", "EEM", "TLT", "IEF", "GLD", "DBC", "VNQ",
                 "BTC-USD", "GC=F", "CL=F", "ZC=F"]
 AUDIT = Path("journal/audit.jsonl")
@@ -108,7 +110,7 @@ def cross_asset_sleeve():
         except Exception:
             continue
     if not assets:
-        return None, "no cross-asset data available: sleeve held flat"
+        return None, "no cross-asset data available: sleeve held flat", {}
     feats = {}
     for sym, cs in assets.items():
         closes = [c.close for c in cs]
@@ -121,7 +123,7 @@ def cross_asset_sleeve():
     scaled = {k: round(v * SLEEVE_SHARE, 4) for k, v in weights.items()}
     cash = round(SLEEVE_SHARE - sum(scaled.values()), 4)
     return {"weights": scaled, "cash": cash, "assets": len(assets),
-            "long_names": sorted(scaled)}, None
+            "long_names": sorted(scaled)}, None, assets
 
 
 def main():
@@ -194,7 +196,7 @@ def main():
     if slips:
         record(log, "slippage", f"n={len(slips)} mean={sum(slips)/len(slips):+.1f}bps")
     record(log, "calibration", cal.summary())
-    sleeve, sleeve_note = cross_asset_sleeve()
+    sleeve, sleeve_note, sleeve_assets = cross_asset_sleeve()
     if sleeve:
         SLEEVE_FILE.write_text(json.dumps(sleeve, indent=2), encoding="utf-8")
         record(log, "sleeve_cross", f"{len(sleeve['long_names'])} long of {sleeve['assets']}")
@@ -205,6 +207,29 @@ def main():
     else:
         record(log, "sleeve_cross", sleeve_note or "flat")
         lines += ["", f"**سلیو بین‌دارایی:** {sleeve_note}"]
+    # the product face: cost priced BEFORE the ticket, risk proven on the combined book.
+    # orders we cannot price are marked UNPRICED, never silently treated as free.
+    price_map = {k: v[1] for k, v in closes.items()}
+    all_candles = dict(sleeve_assets or {})
+    for sym in targets:                      # volume is what makes impact priceable
+        if sym in all_candles:
+            continue
+        try:
+            cs, _ = fetch_yahoo(sym, "1d", "2y", cache_dir="data_cache")
+            if cs:
+                all_candles[sym] = cs
+        except Exception:
+            continue
+    orders = screen_orders(targets, price_map, REPORT_CAPITAL, all_candles)
+    sleeve_rets = sleeve_series(sleeve_assets) if sleeve_assets else []
+    rep = build_report(targets, (sleeve or {}).get("weights", {}), orders, sleeve_rets,
+                       [], price_map, REPORT_CAPITAL, all_candles)
+    Path("journal/product_report.md").write_text(markdown(rep, cal.summary()), encoding="utf-8")
+    record(log, "product_report",
+           f"orders={len(orders)} refused={len(rep.refused)} unpriced={len(rep.unpriced)}")
+    lines += ["", f"**گزارش محصول:** journal/product_report.md — "
+                  f"{len(orders)} سفارش قیمت‌گذاری‌شده، {len(rep.refused)} رد، "
+                  f"{len(rep.unpriced)} بدون قیمت"]
     record(log, "decision", f"targets={','.join(sorted(targets))} ts={ts}")
     record(log, "tickets", f"{len(tickets)} tickets")
     for name in guard_notes:
