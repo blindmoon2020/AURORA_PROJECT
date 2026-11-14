@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
+from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
 from aurora import resilience
@@ -115,7 +116,12 @@ def main():
     equity_before = paper_book.mark_to_market(book, closes)
     if state.may_open_positions:
         guard = apply_limits(raw_targets, GuardLimits())
-        targets, guard_notes = guard.allowed, guard.notes
+        # a ranking change is not a reason to trade: only drift beyond the band is
+        held = {p.symbol: p.weight for p in book.positions}
+        banded, skipped = apply_band(held, guard.allowed, Band())
+        for sym, why in sorted(skipped.items()):
+            guard.notes.append(f"{sym} نگه داشته شد: {why}")
+        targets, guard_notes = banded, guard.notes
         changed = paper_book.rebalance(book, targets, closes)
     else:
         # cached data: the book is KEPT, not liquidated. Selling into a feed you
@@ -153,7 +159,12 @@ def main():
     record(log, "tickets", f"{len(tickets)} tickets")
     for name in guard_notes:
         record(log, "guard", name)
-    lines += ["", f"**کالیبراسیون هزینه:** {cal.summary()}"]
+    held_before = {p.symbol: p.weight for p in book.positions}
+    t_one_way = turnover_of(held_before, targets)
+    lines += ["", f"**گردش سبد:** {t_one_way:.1%} یک‌طرفه · "
+                  f"هزینه تقریبی سالانه اگر ماهانه تکرار شود: "
+                  f"{break_even_edge(t_one_way, 0.0124):.1%} (جدول تهران)"]
+    lines += [f"**کالیبراسیون هزینه:** {cal.summary()}"]
     if book.slippage_bps:
         avg = sum(book.slippage_bps) / len(book.slippage_bps)
         lines += ["", f"لغزش اندازه‌گیری‌شده: میانگین {avg:+.2f} bps روی {len(book.slippage_bps)} سفارش"]
