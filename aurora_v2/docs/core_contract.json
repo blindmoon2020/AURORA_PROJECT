@@ -1,0 +1,121 @@
+{
+ "aurora.calibration": {
+  "Calibration": "class",
+  "calibrate": "(observations: Sequence[float], assumption_bps: float = 10.0, prior_weight: float = 30.0) -> aurora.calibration.Calibration",
+  "measure": "(fills: Iterable[tuple]) -> List[float]",
+  "slippage_bps": "(decision_price: float, fill_price: float, is_buy: bool = True) -> float"
+ },
+ "aurora.core.types": {
+  "Candle": "class",
+  "Side": "class",
+  "candle": "(ts: 'int', open: 'float', high: 'float', low: 'float', close: 'float', volume: 'float' = 0.0) -> \"'Candle'\""
+ },
+ "aurora.execution.fill_capture": {
+  "CaptureReport": "class",
+  "MatchedFill": "class",
+  "calibrate_from_capture": "(report: aurora.execution.fill_capture.CaptureReport, prior_observations: Sequence[float], assumption_bps: float = 10.0)",
+  "capture": "(tickets: Sequence[aurora.execution.manual.OrderTicket], fills: Iterable[aurora.execution.manual.FillRecord], already_captured: Optional[Set[str]] = None, market_open_ts: Optional[Sequence[int]] = None) -> aurora.execution.fill_capture.CaptureReport",
+  "ready_for_first_fill": "(report: aurora.execution.fill_capture.CaptureReport) -> tuple"
+ },
+ "aurora.execution.impact": {
+  "ImpactEstimate": "class",
+  "Latency": "class",
+  "calibrate_k": "(observations: Sequence[tuple], min_samples: int = 10) -> dict",
+  "estimate": "(notional: float, adv_notional: Optional[float], daily_vol_bps: float, half_spread_bps: float = 0.5, k: float = 10.0, cap: float = 0.1) -> aurora.execution.impact.ImpactEstimate",
+  "latency_report": "(samples: Sequence[aurora.execution.impact.Latency]) -> dict",
+  "participation": "(notional: float, adv_notional: Optional[float]) -> Optional[float]",
+  "sliced_cost_money": "(notional: float, adv_notional: Optional[float], daily_vol_bps: float, half_spread_bps: float = 0.5, k: float = 10.0, cap: float = 0.1) -> Optional[float]",
+  "slippage_vs_impact": "(measured_bps: float, estimated: aurora.execution.impact.ImpactEstimate) -> str",
+  "split_order": "(notional: float, adv_notional: Optional[float], daily_vol_bps: float, half_spread_bps: float = 0.5, k: float = 10.0, cap: float = 0.1) -> dict"
+ },
+ "aurora.execution.manual_bridge": {
+  "book_from_fills": "(fills: Sequence[aurora.execution.manual.FillRecord], equity: float) -> Dict[str, float]",
+  "session_summary": "(tickets: Sequence[aurora.execution.manual.OrderTicket], fills: Sequence[aurora.execution.manual.FillRecord]) -> str",
+  "tickets_for_targets": "(targets: Dict[str, float], prices: Dict[str, float], equity: float, decision_id: str, created_ts: int, ttl_seconds: int = 21600, limit_buffer_bps: float = 0.0) -> List[aurora.execution.manual.OrderTicket]"
+ },
+ "aurora.execution.paper_book": {
+  "PaperBook": "class",
+  "Position": "class",
+  "apply_fills": "(book: aurora.execution.paper_book.PaperBook, candles: Dict[str, Sequence[aurora.core.types.Candle]], max_delay_hours: float = 96.0) -> List[dict]",
+  "load": "(path: str | pathlib.Path) -> Optional[aurora.execution.paper_book.PaperBook]",
+  "mark_to_market": "(book: aurora.execution.paper_book.PaperBook, closes: Dict[str, tuple[int, float]]) -> float",
+  "rebalance": "(book: aurora.execution.paper_book.PaperBook, targets: Dict[str, float], closes: Dict[str, tuple[int, float]]) -> List[str]",
+  "save": "(book: aurora.execution.paper_book.PaperBook, path: str | pathlib.Path) -> None"
+ },
+ "aurora.execution.reconcile": {
+  "Break": "class",
+  "Reconciliation": "class",
+  "reconcile": "(expected: Dict[str, float], actual: Dict[str, float], cash_expected: Optional[float] = None, cash_actual: Optional[float] = None, unit_tolerance: float = 1e-06, cash_tolerance: float = 0.01) -> aurora.execution.reconcile.Reconciliation",
+  "require_clean": "(rep: aurora.execution.reconcile.Reconciliation) -> None"
+ },
+ "aurora.portfolio.brakes": {
+  "OverlayDecision": "class",
+  "apply_overlay": "(weights: Dict[str, float], decision: aurora.portfolio.brakes.OverlayDecision) -> Dict[str, float]",
+  "decide": "(weights: Dict[str, float], current_vol: Optional[float] = None, target_vol: Optional[float] = None, drawdown_pct: float = 0.0, limit_pct: float = 40.0, reserved_exposure: float = 0.0) -> aurora.portfolio.brakes.OverlayDecision",
+  "drawdown_scale": "(drawdown_pct: float, soft: float = 10.0, hard: float = 20.0, floor: float = 0.25) -> float",
+  "vol_target_scale": "(current_vol: float, target_vol: float, floor: float = 0.3) -> float"
+ },
+ "aurora.portfolio.guard": {
+  "GuardLimits": "class",
+  "GuardResult": "class",
+  "apply_limits": "(targets: Dict[str, float], limits: aurora.portfolio.guard.GuardLimits, risk_off: bool = False) -> aurora.portfolio.guard.GuardResult"
+ },
+ "aurora.portfolio.overlay": {
+  "trend_brake": "(returns: Sequence[float], benchmark: Sequence[float], window: int = 10) -> List[float]",
+  "vol_target": "(returns: Sequence[float], target: float = 0.12, window: int = 6, cap: float = 1.0, periods_per_year: int = 12) -> List[float]"
+ },
+ "aurora.portfolio.risk_budget": {
+  "concentration_check": "(weights: Dict[str, float], cov: Dict[str, Dict[str, float]], limit: float = 0.55) -> tuple",
+  "correlation": "(a: Sequence[float], b: Sequence[float]) -> float",
+  "covariance_matrix": "(series: Dict[str, Sequence[float]]) -> Dict[str, Dict[str, float]]",
+  "diversification_ratio": "(weights: Dict[str, float], cov: Dict[str, Dict[str, float]]) -> float",
+  "equal_risk_weights": "(cov: Dict[str, Dict[str, float]], iterations: int = 500, tolerance: float = 1e-10) -> Dict[str, float]",
+  "portfolio_vol": "(weights: Dict[str, float], cov: Dict[str, Dict[str, float]]) -> float",
+  "risk_contributions": "(weights: Dict[str, float], cov: Dict[str, Dict[str, float]]) -> Dict[str, float]",
+  "shrunk_covariance": "(series: Dict[str, Sequence[float]], target_correlation: Optional[float] = None) -> Dict[str, Dict[str, float]]",
+  "stressed_covariance": "(cov: Dict[str, Dict[str, float]], crisis_correlation: float = 0.85) -> Dict[str, Dict[str, float]]",
+  "to_crisis_weights": "(weights: Dict[str, float], cov: Dict[str, Dict[str, float]], crisis_correlation: float = 0.85) -> Dict[str, float]"
+ },
+ "aurora.portfolio.scenarios": {
+  "ScenarioLoss": "class",
+  "class_of": "(symbol: str) -> str",
+  "crisis_exposure_cap": "(weights: Dict[str, float], limit_pct: float, scenario: Optional[str] = None) -> Dict[str, float]",
+  "margin_of_safety": "(weights: Dict[str, float], limit_pct: float) -> Dict[str, float]",
+  "replay": "(weights: Dict[str, float], scenario: str, limit_pct: Optional[float] = None, shock_table: Optional[Dict[str, float]] = None) -> aurora.portfolio.scenarios.ScenarioLoss",
+  "replay_all": "(weights: Dict[str, float], limit_pct: Optional[float] = None) -> list",
+  "reverse_stress": "(weights: Dict[str, float], limit_pct: float, lo: float = 0.0, hi: float = 1.0, tolerance: float = 0.0001) -> float",
+  "tail_loss": "(weights: Dict[str, float], daily_vol: float = 0.01, horizon_days: int = 21, df: float = 3.0, quantile: float = 0.99) -> float"
+ },
+ "aurora.portfolio.turnover": {
+  "Band": "class",
+  "apply_band": "(current: Dict[str, float], target: Dict[str, float], band: aurora.portfolio.turnover.Band = Band(abs_band=0.02, rel_band=0.25, min_trade_weight=0.01)) -> Tuple[Dict[str, float], Dict[str, str]]",
+  "break_even_edge": "(turnover_one_way: float, cost_rate: float, periods_per_year: int = 12) -> float",
+  "sweep": "(current: Dict[str, float], target: Dict[str, float], cost_rate: float, bands: Iterable[float] = (0.0, 0.01, 0.02, 0.03, 0.05)) -> list",
+  "trade_cost": "(turnover_one_way: float, cost_rate: float) -> float",
+  "turnover": "(current: Dict[str, float], new: Dict[str, float]) -> float"
+ },
+ "aurora.privacy": {
+  "AuditLog": "class",
+  "Field": "class",
+  "iran_national_id_valid": "(code: str) -> bool",
+  "luhn": "(number: str) -> bool",
+  "pseudonym": "(value: str, namespace: str = 'default') -> str",
+  "redact": "(text: str) -> str",
+  "safe_export": "(rows: Sequence[Dict[str, str]], schema: Sequence[aurora.privacy.Field], allow: Sequence[str] = ('public', 'internal')) -> List[Dict[str, str]]"
+ },
+ "aurora.security": {
+  "assert_safe": "(payload: str, what: str = 'payload') -> str",
+  "contains_secret": "(text: str, secrets: Optional[Iterable[str]] = None) -> bool",
+  "known_secrets": "(env=None) -> List[str]",
+  "redact": "(text: str, secrets: Optional[Iterable[str]] = None) -> str"
+ },
+ "aurora.strategies.cross_asset": {
+  "CrossAssetRules": "class",
+  "momentum": "(closes: Sequence[float], lookback: int = 252, skip: int = 21) -> Optional[float]",
+  "realized_vol": "(closes: Sequence[float], window: int = 60, periods_per_year: int = 252) -> Optional[float]",
+  "sized_weights": "(features: Dict[str, dict], rules: aurora.strategies.cross_asset.CrossAssetRules = CrossAssetRules(lookback_days=252, skip_days=21, vol_window_days=60, cadence_days=21, cost_per_turnover=0.0004, max_weight_per_asset=0.35, min_vol=1e-06, min_history=200)) -> Dict[str, float]",
+  "sleeve_series": "(assets: Dict[str, Sequence[aurora.core.types.Candle]], rules: aurora.strategies.cross_asset.CrossAssetRules = CrossAssetRules(lookback_days=252, skip_days=21, vol_window_days=60, cadence_days=21, cost_per_turnover=0.0004, max_weight_per_asset=0.35, min_vol=1e-06, min_history=200), calendar_symbol: str = 'SPY') -> List[float]",
+  "step": "(held: Dict[str, float], features: Dict[str, dict], rules: aurora.strategies.cross_asset.CrossAssetRules = CrossAssetRules(lookback_days=252, skip_days=21, vol_window_days=60, cadence_days=21, cost_per_turnover=0.0004, max_weight_per_asset=0.35, min_vol=1e-06, min_history=200)) -> tuple",
+  "turnover": "(held: Dict[str, float], target: Dict[str, float]) -> float"
+ }
+}

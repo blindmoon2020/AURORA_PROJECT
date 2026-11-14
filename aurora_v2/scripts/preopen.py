@@ -102,9 +102,17 @@ def session_state():
           time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime(nxt)))
 
 
+def core_integrity():
+    """The core's public surface must match its committed contract."""
+    from aurora import core_contract
+    ok, message = core_contract.check()
+    check("core contract intact", ok, message)
+
+
 def main() -> int:
     print("AURORA pre-open gate\n" + "-" * 66)
     rehearsal()
+    core_integrity()
     book_state()
     ticket_state()
     session_state()
