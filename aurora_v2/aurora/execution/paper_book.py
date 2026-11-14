@@ -32,6 +32,7 @@ class PaperBook:
     slippage_bps: List[float] = field(default_factory=list)
     sessions: int = 0
     expired: List[dict] = field(default_factory=list)   # stale decisions, never filled
+    peak_equity: float = 1.0                            # running high-water mark
 
     def to_json(self) -> dict:
         return asdict(self)
@@ -42,7 +43,8 @@ class PaperBook:
                    equity=blob.get("equity", 1.0),
                    slippage_bps=list(blob.get("slippage_bps", [])),
                    sessions=int(blob.get("sessions", 0)),
-                   expired=list(blob.get("expired", [])))
+                   expired=list(blob.get("expired", [])),
+                   peak_equity=float(blob.get("peak_equity", blob.get("equity", 1.0))))
         book.positions = [Position(**p) for p in blob.get("positions", [])]
         return book
 

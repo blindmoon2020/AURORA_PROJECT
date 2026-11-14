@@ -14,6 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
+from aurora.portfolio.overlay import trend_brake, vol_target
+from aurora.portfolio.brakes import apply_overlay, decide as overlay_decide
 from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
 from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
@@ -158,6 +160,11 @@ def main():
     # the risk budget is applied to the *raw* ranking, before anything becomes a
     # position: an allowed target is what the book may hold, not what it wanted
     equity_before = paper_book.mark_to_market(book, closes)
+    # three brakes, tightest wins; a brake that could lever up would not be a brake
+    dd_now = max(0.0, (book.peak_equity - equity_before) / book.peak_equity * 100.0) \
+        if getattr(book, "peak_equity", 0) else 0.0
+    overlay = overlay_decide(raw_targets, drawdown_pct=dd_now, limit_pct=40.0,
+                             reserved_exposure=SLEEVE_SHARE)
     if state.may_open_positions:
         guard = apply_limits(raw_targets, GuardLimits())
         # a ranking change is not a reason to trade: only drift beyond the band is
@@ -165,7 +172,11 @@ def main():
         banded, skipped = apply_band(held, guard.allowed, Band())
         for sym, why in sorted(skipped.items()):
             guard.notes.append(f"{sym} نگه داشته شد: {why}")
-        targets, guard_notes = banded, guard.notes
+        targets, guard_notes = apply_overlay(banded, overlay), guard.notes
+        if overlay.scale < 1.0:
+            guard_notes.append(f"لایه ریسک: {overlay.summary()}")
+            for n in overlay.notes:
+                guard_notes.append(n)
         changed = paper_book.rebalance(book, targets, closes)
     else:
         # cached data: the book is KEPT, not liquidated. Selling into a feed you
@@ -175,6 +186,7 @@ def main():
                        "هیچ پوزیشن جدیدی باز و هیچ پوزیشنی بسته نشد"]
         changed = []
     equity = paper_book.mark_to_market(book, closes)
+    book.peak_equity = max(getattr(book, "peak_equity", equity), equity)
     paper_book.save(book, BOOK)
 
     lines = ["# جلسه پیپر تریدینگ", "",
@@ -255,6 +267,7 @@ def main():
     rep = build_report(targets, (sleeve or {}).get("weights", {}), orders, sleeve_rets,
                        [], price_map, REPORT_CAPITAL, all_candles)
     Path("journal/product_report.md").write_text(markdown(rep, cal.summary()), encoding="utf-8")
+    record(log, "overlay", overlay.summary())
     record(log, "product_report",
            f"orders={len(orders)} refused={len(rep.refused)} unpriced={len(rep.unpriced)}")
     lines += ["", f"**گزارش محصول:** journal/product_report.md — "
