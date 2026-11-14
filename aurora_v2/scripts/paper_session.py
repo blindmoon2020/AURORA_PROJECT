@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
+from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
 from aurora import resilience
@@ -160,6 +161,9 @@ def main():
     for name in guard_notes:
         record(log, "guard", name)
     held_before = {p.symbol: p.weight for p in book.positions}
+    chg = attribution.events(held_before, targets)
+    lines += ["", f"**تغییرات به تفکیک نوع:** {attribution.describe(chg)}"]
+    record(log, "attribution", attribution.describe(chg))
     t_one_way = turnover_of(held_before, targets)
     lines += ["", f"**گردش سبد:** {t_one_way:.1%} یک‌طرفه · "
                   f"هزینه تقریبی سالانه اگر ماهانه تکرار شود: "
