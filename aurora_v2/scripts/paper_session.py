@@ -5,6 +5,7 @@ universe with the frozen weights, writes the decision to the book, fills whateve
 the market has since opened, and marks the book to market.
 """
 import json
+from datetime import datetime, timezone
 import os
 import sys
 from pathlib import Path
@@ -18,6 +19,8 @@ from aurora.portfolio.overlay import trend_brake, vol_target
 from aurora.portfolio.brakes import apply_overlay, decide as overlay_decide
 from aurora.advisory.recommender import explain as explain_proposal
 from aurora.advisory.recommender import recommend
+from aurora.analysis.advanced_ta import technical_read
+from aurora.data.news_calendar import event_risk_gate, load_calendar
 from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
 from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
@@ -168,7 +171,22 @@ def main():
     overlay = overlay_decide(raw_targets, drawdown_pct=dd_now, limit_pct=40.0,
                              reserved_exposure=SLEEVE_SHARE,
                              previous_scale=float(getattr(book, "overlay_scale", 1.0) or 1.0))
-    if state.may_open_positions:
+    # event risk gate: a high-impact release inside the window stops NEW risk, while
+    # existing positions keep being managed. Not knowing the calendar is reported as
+    # unknown exposure, never as safety.
+    cal_events, cal_problems = load_calendar("journal/calendar.csv")
+    gate_allowed, gate_reason = event_risk_gate(cal_events, datetime.now(timezone.utc))
+    if cal_problems:
+        record(log, "calendar", "؛ ".join(cal_problems)[:180])
+    if not gate_allowed:
+        record(log, "event_gate", gate_reason)
+    may_open = state.may_open_positions and gate_allowed
+    if state.may_open_positions and not gate_allowed:
+        guard_notes_gate = [f"ریسک تازه بسته شد: {gate_reason}"]
+    else:
+        guard_notes_gate = []
+
+    if may_open:
         guard = apply_limits(raw_targets, GuardLimits())
         # a ranking change is not a reason to trade: only drift beyond the band is
         held = {p.symbol: p.weight for p in book.positions}
@@ -275,7 +293,19 @@ def main():
     # book, so the recommendation a user reads and the trade the system makes cannot drift
     series = {sym: [c.close for c in bars] for sym, bars in prices.items()}
     proposal = recommend(series, risk_scale=overlay.scale)
-    Path("journal/advisory.md").write_text(explain_proposal(proposal), encoding="utf-8")
+    reads = [technical_read(sym, bars) for sym, bars in
+             sorted(prices.items(), key=lambda kv: kv[0])][:12]
+    advisory_text = explain_proposal(proposal)
+    advisory_text += "\n## تصویر تکنیکال هر نماد\n\n"
+    advisory_text += "این بخش لایه گزارش است و **در امتیاز پیشنهاد وزن ندارد**؛ ورود آن به \n"
+    advisory_text += "امتیاز فقط پس از آزمون خارج‌از‌نمونه مجاز است.\n\n"
+    for read in reads:
+        advisory_text += f"- {read.line()}\n"
+        for warn in read.warnings:
+            advisory_text += f"  - هشدار: {warn}\n"
+    if guard_notes_gate:
+        advisory_text += "\n## توقف ریسک تازه\n\n" + "".join(f"- {n}\n" for n in guard_notes_gate)
+    Path("journal/advisory.md").write_text(advisory_text, encoding="utf-8")
     record(log, "advisory", proposal.summary())
     record(log, "overlay", overlay.summary())
     record(log, "product_report",

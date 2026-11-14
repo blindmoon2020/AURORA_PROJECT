@@ -102,6 +102,18 @@ def session_state():
           time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime(nxt)))
 
 
+def calendar_gate():
+    """A high-impact event inside the window must stop new risk, not surprise it."""
+    from datetime import datetime, timezone
+    from aurora.data.news_calendar import event_risk_gate, load_calendar
+    events, problems = load_calendar("journal/calendar.csv")
+    if problems:
+        check("economic calendar readable", False, "؛ ".join(problems)[:160])
+        return
+    allowed, reason = event_risk_gate(events, datetime.now(timezone.utc))
+    check("event risk gate clear for new risk", allowed, reason)
+
+
 def core_integrity():
     """The core's public surface must match its committed contract."""
     from aurora import core_contract
@@ -113,6 +125,7 @@ def main() -> int:
     print("AURORA pre-open gate\n" + "-" * 66)
     rehearsal()
     core_integrity()
+    calendar_gate()
     book_state()
     ticket_state()
     session_state()
