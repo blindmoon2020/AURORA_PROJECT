@@ -164,7 +164,8 @@ def main():
     dd_now = max(0.0, (book.peak_equity - equity_before) / book.peak_equity * 100.0) \
         if getattr(book, "peak_equity", 0) else 0.0
     overlay = overlay_decide(raw_targets, drawdown_pct=dd_now, limit_pct=40.0,
-                             reserved_exposure=SLEEVE_SHARE)
+                             reserved_exposure=SLEEVE_SHARE,
+                             previous_scale=float(getattr(book, "overlay_scale", 1.0) or 1.0))
     if state.may_open_positions:
         guard = apply_limits(raw_targets, GuardLimits())
         # a ranking change is not a reason to trade: only drift beyond the band is
@@ -187,6 +188,7 @@ def main():
         changed = []
     equity = paper_book.mark_to_market(book, closes)
     book.peak_equity = max(getattr(book, "peak_equity", equity), equity)
+    book.overlay_scale = overlay.scale
     paper_book.save(book, BOOK)
 
     lines = ["# جلسه پیپر تریدینگ", "",

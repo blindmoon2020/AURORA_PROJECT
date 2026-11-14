@@ -59,9 +59,30 @@ def drawdown_scale(drawdown_pct: float, soft: float = 10.0, hard: float = 20.0,
     return max(floor, 1.0 - (dd - soft) / span * (1.0 - floor))
 
 
+def smoothed_scale(new_scale: float, previous_scale: Optional[float] = None,
+                   min_increase: float = 0.05) -> float:
+    """De-risk at once, re-risk slowly. The asymmetry is the point.
+
+    Recomputing the scale every session would trade a little on every wobble in the stress
+    replay, and each of those trades pays commission to move money a few percent. So a cut
+    is taken immediately (a brake that waits is not a brake), while a rise is only taken
+    when it is materially larger than the last scale. That is what makes the overlay cheap
+    as well as safe.
+    """
+    if previous_scale is None:
+        return new_scale
+    if new_scale < previous_scale:
+        return new_scale
+    if new_scale - previous_scale > min_increase:
+        return new_scale
+    return previous_scale
+
+
 def decide(weights: Dict[str, float], current_vol: Optional[float] = None,
            target_vol: Optional[float] = None, drawdown_pct: float = 0.0,
-           limit_pct: float = 40.0, reserved_exposure: float = 0.0) -> OverlayDecision:
+           limit_pct: float = 40.0, reserved_exposure: float = 0.0,
+           previous_scale: Optional[float] = None,
+           min_increase: float = 0.05) -> OverlayDecision:
     """Combine the brakes. The tightest governs; every part is reported, not just the winner."""
     parts: Dict[str, float] = {}
     notes: List[str] = []
@@ -94,7 +115,11 @@ def decide(weights: Dict[str, float], current_vol: Optional[float] = None,
         return OverlayDecision(1.0, "هیچ", {}, ["داده کافی برای هیچ ترمزی نبود: مقیاس کامل"])
 
     binding = min(parts, key=lambda k: parts[k])
-    scale = min(1.0, parts[binding])
+    raw = min(1.0, parts[binding])
+    scale = smoothed_scale(raw, previous_scale, min_increase)
+    if previous_scale is not None and scale != raw:
+        notes.append(f"مقیاس روی {scale:.2f} نگه داشته شد (اختلاف {raw:.2f} کمتر از "
+                     f"آستانه {min_increase:.0%} است): افزایش مواجهه فقط در گام معنادار")
     return OverlayDecision(scale, binding, parts, notes)
 
 

@@ -51,8 +51,9 @@
  "aurora.portfolio.brakes": {
   "OverlayDecision": "class",
   "apply_overlay": "(weights: Dict[str, float], decision: aurora.portfolio.brakes.OverlayDecision) -> Dict[str, float]",
-  "decide": "(weights: Dict[str, float], current_vol: Optional[float] = None, target_vol: Optional[float] = None, drawdown_pct: float = 0.0, limit_pct: float = 40.0, reserved_exposure: float = 0.0) -> aurora.portfolio.brakes.OverlayDecision",
+  "decide": "(weights: Dict[str, float], current_vol: Optional[float] = None, target_vol: Optional[float] = None, drawdown_pct: float = 0.0, limit_pct: float = 40.0, reserved_exposure: float = 0.0, previous_scale: Optional[float] = None, min_increase: float = 0.05) -> aurora.portfolio.brakes.OverlayDecision",
   "drawdown_scale": "(drawdown_pct: float, soft: float = 10.0, hard: float = 20.0, floor: float = 0.25) -> float",
+  "smoothed_scale": "(new_scale: float, previous_scale: Optional[float] = None, min_increase: float = 0.05) -> float",
   "vol_target_scale": "(current_vol: float, target_vol: float, floor: float = 0.3) -> float"
  },
  "aurora.portfolio.guard": {

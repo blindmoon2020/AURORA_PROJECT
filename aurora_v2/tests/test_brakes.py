@@ -75,3 +75,29 @@ class DecideTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SmoothingTests(unittest.TestCase):
+    """De-risk at once, re-risk slowly: safety costs nothing, cheapness costs a deadband."""
+
+    def test_no_previous_scale_takes_the_new_one(self):
+        from aurora.portfolio.brakes import smoothed_scale
+        self.assertEqual(smoothed_scale(0.81, None), 0.81)
+
+    def test_a_cut_is_taken_immediately_however_small(self):
+        from aurora.portfolio.brakes import smoothed_scale
+        self.assertEqual(smoothed_scale(0.98, 1.0), 0.98)
+
+    def test_a_small_rise_is_ignored_to_avoid_churn(self):
+        from aurora.portfolio.brakes import smoothed_scale
+        self.assertEqual(smoothed_scale(1.0, 0.97), 0.97)
+
+    def test_a_meaningful_rise_is_taken(self):
+        from aurora.portfolio.brakes import smoothed_scale
+        self.assertEqual(smoothed_scale(1.0, 0.90), 1.0)
+
+    def test_the_deadband_is_reported_not_hidden(self):
+        d = decide({f"S{i}": 0.10 for i in range(10)}, limit_pct=40,
+                   reserved_exposure=0.30, previous_scale=0.80)
+        self.assertAlmostEqual(d.scale, 0.80, places=6)
+        self.assertTrue(any("نگه داشته شد" in n for n in d.notes))
