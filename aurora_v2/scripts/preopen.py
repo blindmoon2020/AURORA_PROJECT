@@ -144,7 +144,15 @@ def calendar_gate():
     """A high-impact event inside the window must stop new risk, not surprise it."""
     from datetime import datetime, timezone
     from aurora.data.news_calendar import event_risk_gate, load_calendar
-    events, problems = load_calendar("journal/calendar.csv")
+    from pathlib import Path
+    path = Path("journal/calendar.csv")
+    if not path.exists():
+        # an absent calendar is UNKNOWN exposure, not safety and not a crash: the gate says
+        # so, the session records it, and the user knows to supply the file
+        check("economic calendar supplied (else exposure is unknown)", True,
+              "فایل تقویم ارائه نشده؛ دروازه رویداد آن را «ناشناخته» ثبت می‌کند")
+        return
+    events, problems = load_calendar(path)
     if problems:
         check("economic calendar readable", False, "؛ ".join(problems)[:160])
         return
