@@ -118,6 +118,23 @@ class VolumeProfileTests(unittest.TestCase):
         self.assertEqual(vp["poc"], 100)
 
 
+class ProfileWindowTests(unittest.TestCase):
+    """Debt from AUDIT 4.16: the point of control was computed over 20 years, so the
+    percentage versus today was meaningless (+3404%). This locks the window."""
+
+    def test_the_profile_uses_a_recent_window_not_the_whole_history(self):
+        older = [10 + (i % 3) for i in range(400)]        # ancient prices around 10
+        recent = [100 + (i % 3) for i in range(300)]      # current prices around 100
+        read = ta.technical_read("X", bars(older + recent), profile_window=252)
+        self.assertGreater(read.poc, 90, "POC باید از پنجره اخیر باشد نه تاریخ باستان")
+        self.assertLess(abs(read.price_vs_poc_pct), 15)
+
+    def test_the_window_is_stated_in_the_reason(self):
+        read = ta.technical_read("X", bars([100 + i * 0.1 for i in range(300)]),
+                                 profile_window=252)
+        self.assertTrue(any("پنجره" in r for r in read.reasons))
+
+
 class ReadTests(unittest.TestCase):
     def test_a_full_read_carries_structure_breakout_and_measurements(self):
         closes = [100 + i * 0.5 for i in range(120)]

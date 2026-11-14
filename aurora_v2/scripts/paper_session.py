@@ -21,6 +21,7 @@ from aurora.advisory.recommender import explain as explain_proposal
 from aurora.advisory.recommender import recommend
 from aurora.analysis.advanced_ta import technical_read
 from aurora.data.news_calendar import event_risk_gate, load_calendar
+from aurora.execution.live_router import route_book, route_report
 from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
 from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
@@ -227,6 +228,12 @@ def main():
         lines_txt = "\n".join(t.line() for t in tickets)
         Path("journal/tickets.txt").write_text(lines_txt + "\n", encoding="utf-8")
         lines += ["", f"تیکت‌های آماده اجرا: {len(tickets)} در journal/tickets.txt"]
+
+    # every intended position must know which pipe it would use, or say why it has none
+    routes = route_book(targets if 'targets' in dir() else {}, has_broker_api=False,
+                        has_exchange_keys=False)
+    Path("journal/routes.md").write_text(route_report(routes), encoding="utf-8")
+    record(log, "routes", routes.summary())
     # realized slippage feeds the cost assumption - but only through the once-only gate.
     # A fill that arrives late, twice, or without a ticket must never reach the sample,
     # because a contaminated sample shows false confidence in the cost that sizes trades.

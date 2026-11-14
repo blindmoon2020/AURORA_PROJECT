@@ -102,6 +102,44 @@ def session_state():
           time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime(nxt)))
 
 
+def execution_routes():
+    """Every held position must know its pipe, and a broker mismatch must stop new risk."""
+    import json
+    from pathlib import Path
+    from aurora.execution.live_router import route_symbol
+    from aurora.execution.reconcile import reconcile, require_clean
+    book_file = Path("journal/paper_book.json")
+    if not book_file.exists():
+        check("execution routes resolvable", False, "دفتر پیپر نیست")
+        return
+    book = json.loads(book_file.read_text(encoding="utf-8"))
+    symbols = [pos["symbol"] for pos in book.get("positions", [])]
+    blocked = []
+    for symbol in symbols:
+        try:
+            if route_symbol(symbol).blocked:
+                blocked.append(symbol)
+        except Exception:
+            blocked.append(symbol)
+    check("every held position has a usable execution route", not blocked,
+          "بدون مسیر: " + "، ".join(blocked) if blocked else f"{len(symbols)} پوزیشن")
+
+    snapshot = Path("journal/broker_snapshot.json")
+    if not snapshot.exists():
+        check("reconciliation (no broker snapshot in paper mode)", True,
+              "بدون دسترسی کارگزار، تطبیق لازم نیست")
+        return
+    actual = json.loads(snapshot.read_text(encoding="utf-8"))
+    expected = {pos["symbol"]: pos.get("units", pos.get("weight", 0.0))
+                for pos in book.get("positions", [])}
+    rep = reconcile(expected, actual)
+    try:
+        require_clean(rep)
+        check("ledger reconciles with broker", True, "بدون اختلاف")
+    except Exception as exc:
+        check("ledger reconciles with broker", False, str(exc)[:160])
+
+
 def calendar_gate():
     """A high-impact event inside the window must stop new risk, not surprise it."""
     from datetime import datetime, timezone
@@ -126,6 +164,7 @@ def main() -> int:
     rehearsal()
     core_integrity()
     calendar_gate()
+    execution_routes()
     book_state()
     ticket_state()
     session_state()
