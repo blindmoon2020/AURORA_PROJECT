@@ -16,6 +16,8 @@ from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.portfolio.overlay import trend_brake, vol_target
 from aurora.portfolio.brakes import apply_overlay, decide as overlay_decide
+from aurora.advisory.recommender import explain as explain_proposal
+from aurora.advisory.recommender import recommend
 from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnover as turnover_of
 from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
@@ -269,6 +271,12 @@ def main():
     rep = build_report(targets, (sleeve or {}).get("weights", {}), orders, sleeve_rets,
                        [], price_map, REPORT_CAPITAL, all_candles)
     Path("journal/product_report.md").write_text(markdown(rep, cal.summary()), encoding="utf-8")
+    # the advisory surface is produced from the same data and the same brake scale as the
+    # book, so the recommendation a user reads and the trade the system makes cannot drift
+    series = {sym: [c.close for c in bars] for sym, bars in prices.items()}
+    proposal = recommend(series, risk_scale=overlay.scale)
+    Path("journal/advisory.md").write_text(explain_proposal(proposal), encoding="utf-8")
+    record(log, "advisory", proposal.summary())
     record(log, "overlay", overlay.summary())
     record(log, "product_report",
            f"orders={len(orders)} refused={len(rep.refused)} unpriced={len(rep.unpriced)}")
