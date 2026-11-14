@@ -3,6 +3,53 @@ import unittest
 from aurora.core import asset_universe as au
 
 
+class ExpansionTests(unittest.TestCase):
+    """The owner's requirement: all FX pairs, all metals, all agri, many ETFs and funds, and
+    bonds of the US and other countries - not a token sample of each."""
+
+    def test_all_world_fx_pairs_are_present(self):
+        from aurora.core import asset_universe as au
+        pairs = {i.symbol for i in au.by_class(au.FX)}
+        self.assertGreaterEqual(len(pairs), 60)
+        for required in ("EURUSD", "USDJPY", "EURGBP", "USDCNH", "USDINR", "USDZAR",
+                         "USDBRL", "USDTRY", "USDIRR"):
+            self.assertIn(required, pairs)
+
+    def test_metals_cover_precious_and_industrial(self):
+        from aurora.core import asset_universe as au
+        metals = {i.symbol for i in au.by_class(au.METALS)}
+        for required in ("XAUUSD", "XAGUSD", "GC=F", "SI=F", "HG=F", "LME_NI", "LME_ZN"):
+            self.assertIn(required, metals)
+
+    def test_agriculture_includes_the_iranian_commodities(self):
+        from aurora.core import asset_universe as au
+        agri = {i.symbol for i in au.by_class(au.AGRI)}
+        for required in ("ZC=F", "ZW=F", "KC=F", "SB=F", "CC=F", "CT=F",
+                         "زعفران_نگین", "پسته"):
+            self.assertIn(required, agri)
+
+    def test_funds_and_etfs_are_not_a_token_list(self):
+        from aurora.core import asset_universe as au
+        self.assertGreaterEqual(len(au.by_class(au.ETF)), 50)
+        self.assertGreaterEqual(len(au.by_class(au.FUND)), 6)
+
+    def test_bonds_cover_the_us_and_other_countries(self):
+        from aurora.core import asset_universe as au
+        bonds = {i.symbol for i in au.by_class(au.FIXED_INCOME)}
+        for required in ("ZN=F", "ZB=F", "FBTP", "JBTP", "اخزا"):
+            self.assertIn(required, bonds)
+
+    def test_the_catalogue_stays_structurally_sound_at_this_size(self):
+        from aurora.core import asset_universe as au
+        self.assertEqual(au.audit(), [])
+        self.assertGreaterEqual(len(au.INSTRUMENTS), 240)
+
+    def test_no_symbol_is_duplicated(self):
+        from aurora.core import asset_universe as au
+        symbols = [i.symbol for i in au.INSTRUMENTS]
+        self.assertEqual(len(symbols), len(set(symbols)))
+
+
 class CatalogueTests(unittest.TestCase):
     def test_the_catalogue_has_no_structural_problems(self):
         self.assertEqual(au.audit(), [])
