@@ -19,6 +19,7 @@ from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
 from aurora import resilience
+from aurora.data.filings import freshness, guard_no_lookahead
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
@@ -96,6 +97,8 @@ def main():
     state = data_state(prices)
     record(log, "data_state", state.stamp())
     raw_targets, closes, blended, ts = latest_scores(prices, filings)
+    fresh = freshness(filings, ts)
+    record(log, "fundamental_freshness", fresh.summary())
     book = paper_book.load(BOOK) or paper_book.PaperBook(started=str(ts))
     filled = paper_book.apply_fills(book, prices)
 
