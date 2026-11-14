@@ -59,3 +59,35 @@ class HarnessTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PlausibilityTests(unittest.TestCase):
+    def test_an_unbelievable_sharpe_is_withheld_not_celebrated(self):
+        from aurora.backtest.harness import study_report
+        noisy = [0.05 + 0.0005 * ((-1) ** i) for i in range(100)]
+        series = {f"c{i}": noisy for i in range(4)}   # absurdly consistent
+        rep = study_report(series, label="too good")
+        self.assertIsNotNone(rep.get("implausible"))
+        self.assertIn("survivorship", rep["implausible"].lower())
+
+    def test_a_modest_result_is_not_flagged(self):
+        from aurora.backtest.harness import study_report
+        series = {f"c{i}": ([0.01, -0.004, 0.006, 0.002, -0.003] * 12) for i in range(4)}
+        rep = study_report(series, label="modest")
+        self.assertIsNone(rep.get("implausible"))
+
+
+class UnitConsistencyTests(unittest.TestCase):
+    def test_harness_sharpe_matches_the_verdict_sharpe(self):
+        """The verdict must not compute a different Sharpe than the harness reports."""
+        from aurora.backtest.harness import study_report
+        series = {f"c{i}": [0.01, -0.005, 0.008, 0.002, -0.004, 0.006] * 20 for i in range(4)}
+        rep = study_report(series, label="units")
+        self.assertAlmostEqual(rep["sharpe"], rep["verdict"].sharpe, places=9)
+
+    def test_monthly_series_is_not_annualised_with_252_periods(self):
+        from aurora.backtest.harness import study_report
+        series = {f"c{i}": [0.01, -0.01] * 40 for i in range(4)}
+        rep = study_report(series, label="scale")
+        # a 1%/-1% alternation has near-zero Sharpe, never the 252-period inflation
+        self.assertLess(abs(rep["sharpe"]), 1.0)

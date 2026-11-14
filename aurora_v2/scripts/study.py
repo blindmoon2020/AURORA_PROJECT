@@ -75,6 +75,11 @@ def main() -> int:
           f"maxDD {v.max_dd_pct:.1f}% · return {rep['total_return_pct']:+.0f}%")
     print(f"deflated Sharpe {v.dsr:.3f} over {len(series)} trials · PBO {pbo} · "
           f"gate {'PASS' if v.passed else 'fail'}")
+    if rep.get("cagr_pct") is not None:
+        print(f"annual return {rep['cagr_pct']:.1f}%/yr")
+    if rep.get("implausible"):
+        print(f"NOT A CLAIM: {rep['implausible']}")
+        return 4
     print(f"verdict: {getattr(v, 'reason', '')}")
     return 0 if v.passed else 2
 
