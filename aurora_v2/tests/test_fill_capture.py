@@ -47,6 +47,14 @@ class CaptureTests(unittest.TestCase):
         r = capture([], [FillRecord("T7", BASE + 60, "TSLA", Side.LONG, 1, 250.0)])
         self.assertEqual(r.unknown_ticket, ["T7"])
 
+    def test_a_synthesised_ticket_id_is_unknown_not_matched(self):
+        # guards the wiring: fills must carry their OWN ticket id, never one built from
+        # the symbol, or every real fill silently becomes "unknown" and the sample empties
+        r = capture([ticket("T1", "AAPL")],
+                    [FillRecord("T-1700000000-AAPL", BASE + 60, "AAPL", Side.LONG, 10, 100.1)])
+        self.assertEqual(len(r.matched), 0)
+        self.assertEqual(r.unknown_ticket, ["T-1700000000-AAPL"])
+
     def test_ticket_without_reference_price_is_unmatched(self):
         r = capture([OrderTicket("T1", "D1", "AAPL", Side.LONG, 10, None, BASE, BASE + 999)],
                     [FillRecord("T1", BASE + 60, "AAPL", Side.LONG, 10, 100.0)])

@@ -19,6 +19,8 @@ from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
 from aurora.data import fetch_yahoo
+from aurora.execution.manual import FillRecord, Side
+from aurora.execution import fill_capture
 from aurora.portfolio.product import build_report, markdown, screen_orders
 from aurora.strategies.cross_asset import (CrossAssetRules, momentum, realized_vol,
                                            sized_weights, sleeve_series)
@@ -32,6 +34,7 @@ BOOK = Path("journal/paper_book.json")
 SLEEVE_FILE = Path("journal/sleeve_cross.json")
 SLEEVE_SHARE = 0.30          # frozen before the first sleeve session, not after
 REPORT_CAPITAL = 100_000.0   # the book is unit-normalised; cost needs a notional to size
+CAPTURE = Path("journal/fill_capture.json")   # fills that passed the once-only gate
 CROSS_BASKET = ["SPY", "EFA", "EEM", "TLT", "IEF", "GLD", "DBC", "VNQ",
                 "BTC-USD", "GC=F", "CL=F", "ZC=F"]
 AUDIT = Path("journal/audit.jsonl")
@@ -190,8 +193,35 @@ def main():
         lines_txt = "\n".join(t.line() for t in tickets)
         Path("journal/tickets.txt").write_text(lines_txt + "\n", encoding="utf-8")
         lines += ["", f"تیکت‌های آماده اجرا: {len(tickets)} در journal/tickets.txt"]
-    # realized slippage feeds the cost assumption: the loop closes here, not in prose
-    slips = list(book.slippage_bps)
+    # realized slippage feeds the cost assumption - but only through the once-only gate.
+    # A fill that arrives late, twice, or without a ticket must never reach the sample,
+    # because a contaminated sample shows false confidence in the cost that sizes trades.
+    captured = {"records": []}
+    if CAPTURE.exists():
+        try:
+            captured = json.loads(CAPTURE.read_text())
+        except Exception:
+            captured = {"records": []}
+    already = {r["ticket_id"] for r in captured.get("records", [])}
+    # a fill must carry ITS OWN ticket id. Synthesising one from the symbol would make
+    # every real fill "unknown" and silently empty the sample - the failure mode this
+    # gate exists to prevent, so the id comes from the ticket, never from the symbol.
+    by_symbol = {t.symbol: t for t in tickets}
+    session_fills = [FillRecord(t.ticket_id, p.fill_ts or ts, p.symbol, t.side, t.units,
+                                p.fill_price)
+                     for p in book.positions
+                     for t in [by_symbol.get(p.symbol)]
+                     if p.fill_price is not None and t is not None]
+    report = fill_capture.capture(session_tickets, session_fills, already_captured=already)
+    for m in report.matched:
+        captured["records"].append({"ticket_id": m.ticket_id, "symbol": m.symbol,
+                                    "bps": m.bps, "ts": m.ts})
+    CAPTURE.write_text(json.dumps(captured, indent=1), encoding="utf-8")
+    if report.duplicates or report.late or report.unknown_ticket:
+        record(log, "fill_rejected",
+               f"dup={len(report.duplicates)} late={len(report.late)} "
+               f"unknown={len(report.unknown_ticket)}")
+    slips = [r["bps"] for r in captured["records"]]
     cal = calibrate(slips, assumption_bps=10.0)
     if slips:
         record(log, "slippage", f"n={len(slips)} mean={sum(slips)/len(slips):+.1f}bps")
