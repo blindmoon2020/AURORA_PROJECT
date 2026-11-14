@@ -61,3 +61,31 @@ def assess(interval: str, age_hours: Optional[float], fetch_failed: bool) -> Dat
         return DataState(CACHED, interval, age_hours, "source unreachable, cache within limit")
     return DataState(OFFLINE, interval, age_hours,
                      f"cache {age_hours:.0f}h old exceeds {limit:.0f}h limit for {interval}")
+
+
+# ---------------------------------------------------------------- session gating
+# One rule decides what a scheduled run may do, and it is deliberately blunt:
+# fresh data means act, recent-but-not-fresh means hold, anything older means stop.
+HOLD_MULTIPLE = 3.0
+
+
+def session_state(age_hours: float, interval: str = "1d",
+                  forced_offline: bool = False) -> DataState:
+    """Translate the age of the newest bar into permission, not into a warning.
+
+    A warning next to a trade is ignored; a permission is not. Cached-and-recent
+    may manage a book but never open new risk, because opening risk on data you
+    cannot refresh is how a bad morning becomes an unrecoverable one.
+    """
+    limit = MAX_AGE_HOURS.get(interval, 24.0)
+    if age_hours <= limit and not forced_offline:
+        return DataState(LIVE, interval, age_hours)
+    if age_hours <= limit * HOLD_MULTIPLE:
+        return DataState(CACHED, interval, age_hours,
+                         "feed unreachable or lagging: hold the book, no new risk")
+    return DataState(OFFLINE, interval, age_hours,
+                     f"newest bar {age_hours:.0f}h old exceeds {limit * HOLD_MULTIPLE:.0f}h")
+
+
+def age_hours_of(newest_ts: float, now_ts: float) -> float:
+    return max(0.0, (now_ts - newest_ts) / 3600.0)

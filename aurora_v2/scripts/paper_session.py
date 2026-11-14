@@ -16,6 +16,7 @@ from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
+from aurora import resilience
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
@@ -23,6 +24,15 @@ import v2_walkforward as wf
 BOOK = Path("journal/paper_book.json")
 AUDIT = Path("journal/audit.jsonl")
 VALUE_W, GROWTH_W, TOP_N = 0.4, 0.2, 10     # frozen before the first paper session
+
+
+def data_state(prices):
+    """Freshness of the newest bar, turned into permission rather than a warning."""
+    import time
+    newest = max((c[-1].ts for c in prices.values() if c), default=0)
+    now = float(os.environ.get("AURORA_NOW_TS") or time.time())
+    forced = os.environ.get("AURORA_FORCE_OFFLINE") == "1"
+    return resilience.session_state(resilience.age_hours_of(newest, now), "1d", forced)
 
 
 def audit_log():
@@ -81,20 +91,44 @@ def main():
     log = audit_log()
     record(log, "read_prices", f"{len(prices)} symbols")
     record(log, "read_filings", f"{len(filings)} symbols")
+    state = data_state(prices)
+    record(log, "data_state", state.stamp())
     raw_targets, closes, blended, ts = latest_scores(prices, filings)
     book = paper_book.load(BOOK) or paper_book.PaperBook(started=str(ts))
     filled = paper_book.apply_fills(book, prices)
 
+    if state.mode == resilience.OFFLINE:
+        # nothing is decided on data this old; the book is marked and left alone
+        equity = paper_book.mark_to_market(book, closes) if closes else book.equity
+        paper_book.save(book, BOOK)
+        record(log, "session_skipped", state.stamp())
+        out = ["# جلسه پیپر تریدینگ — متوقف", "",
+               f"وضعیت داده: {state.stamp()}",
+               "تصمیم جدیدی گرفته نشد و ریسک تازه‌ای باز نشد.",
+               f"ارزش سبد (با آخرین قیمت معلوم): {equity:.4f}"]
+        Path("docs/PAPER_SESSION.md").write_text(redact("\n".join(out)) + "\n", encoding="utf-8")
+        print("\n".join(out))
+        return
+
     # the risk budget is applied to the *raw* ranking, before anything becomes a
     # position: an allowed target is what the book may hold, not what it wanted
     equity_before = paper_book.mark_to_market(book, closes)
-    guard = apply_limits(raw_targets, GuardLimits())
-    targets, guard_notes = guard.allowed, guard.notes
-    changed = paper_book.rebalance(book, targets, closes)
+    if state.may_open_positions:
+        guard = apply_limits(raw_targets, GuardLimits())
+        targets, guard_notes = guard.allowed, guard.notes
+        changed = paper_book.rebalance(book, targets, closes)
+    else:
+        # cached data: the book is KEPT, not liquidated. Selling into a feed you
+        # cannot refresh is a market order into the dark; holding costs nothing.
+        targets = {p.symbol: p.weight for p in book.positions}
+        guard_notes = [f"داده تازه نیست ({state.stamp()}): سبد دست‌نخورده ماند، "
+                       "هیچ پوزیشن جدیدی باز و هیچ پوزیشنی بسته نشد"]
+        changed = []
     equity = paper_book.mark_to_market(book, closes)
     paper_book.save(book, BOOK)
 
     lines = ["# جلسه پیپر تریدینگ", "",
+             f"- وضعیت داده: {state.stamp()}",
              f"- زمان تصمیم: {ts} · جلسه شماره {book.sessions}",
              f"- ارزش سبد: {equity:.4f}",
              f"- تغییرات: {'، '.join(changed) if changed else 'بدون تغییر'}",
