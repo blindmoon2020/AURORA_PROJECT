@@ -1,0 +1,10 @@
+1794493800-01 | BUY  AAPL                 0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-02 | BUY  AMZN                 0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-03 | BUY  BAC                  0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-04 | BUY  CSCO                 0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-05 | BUY  F                    0.01 @ market | expires 1794515400 | 10.0% of book
+1794493800-06 | BUY  GOOGL                0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-07 | BUY  JNJ                  0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-08 | BUY  JPM                  0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-09 | BUY  KO                   0.00 @ market | expires 1794515400 | 10.0% of book
+1794493800-10 | BUY  WFC                  0.00 @ market | expires 1794515400 | 10.0% of book

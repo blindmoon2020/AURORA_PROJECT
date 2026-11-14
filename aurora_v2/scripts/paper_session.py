@@ -4,6 +4,7 @@ Run this once per session (daily or on rebalance day). It ranks the frozen
 universe with the frozen weights, writes the decision to the book, fills whatever
 the market has since opened, and marks the book to market.
 """
+import json
 import os
 import sys
 from pathlib import Path
@@ -13,12 +14,28 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
+from aurora.privacy import AuditLog, redact
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
 
 BOOK = Path("journal/paper_book.json")
+AUDIT = Path("journal/audit.jsonl")
 VALUE_W, GROWTH_W, TOP_N = 0.4, 0.2, 10     # frozen before the first paper session
+
+
+def audit_log():
+    return AuditLog(salt="paper-session")
+
+
+def record(log, event, payload, path=AUDIT):
+    entry = log.append(event, payload)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"n": entry["n"], "event": entry["event"],
+                             "payload": entry["payload"], "hash": entry["hash"]},
+                            ensure_ascii=False) + "\n")
+    return entry
 
 
 def latest_scores(prices, filings):
@@ -60,6 +77,9 @@ def latest_scores(prices, filings):
 
 def main():
     prices, filings = wf.load()
+    log = audit_log()
+    record(log, "read_prices", f"{len(prices)} symbols")
+    record(log, "read_filings", f"{len(filings)} symbols")
     raw_targets, closes, blended, ts = latest_scores(prices, filings)
     book = paper_book.load(BOOK) or paper_book.PaperBook(started=str(ts))
     filled = paper_book.apply_fills(book, prices)
@@ -88,6 +108,10 @@ def main():
         lines_txt = "\n".join(t.line() for t in tickets)
         Path("journal/tickets.txt").write_text(lines_txt + "\n", encoding="utf-8")
         lines += ["", f"تیکت‌های آماده اجرا: {len(tickets)} در journal/tickets.txt"]
+    record(log, "decision", f"targets={','.join(sorted(targets))} ts={ts}")
+    record(log, "tickets", f"{len(tickets)} tickets")
+    for name in guard_notes:
+        record(log, "guard", name)
     if book.slippage_bps:
         avg = sum(book.slippage_bps) / len(book.slippage_bps)
         lines += ["", f"لغزش اندازه‌گیری‌شده: میانگین {avg:+.2f} bps روی {len(book.slippage_bps)} سفارش"]
