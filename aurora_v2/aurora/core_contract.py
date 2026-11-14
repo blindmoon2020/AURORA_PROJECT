@@ -22,6 +22,7 @@ CONTRACT_PATH = Path(__file__).resolve().parent.parent / "docs" / "core_contract
 # the modules whose behaviour the rest of the system is allowed to trust
 CORE_MODULES: Tuple[str, ...] = (
     "aurora.core.types",
+    "aurora.core.asset_universe",
     "aurora.execution.paper_book",
     "aurora.execution.manual_bridge",
     "aurora.execution.fill_capture",

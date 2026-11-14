@@ -5,6 +5,21 @@
   "measure": "(fills: Iterable[tuple]) -> List[float]",
   "slippage_bps": "(decision_price: float, fill_price: float, is_buy: bool = True) -> float"
  },
+ "aurora.core.asset_universe": {
+  "Instrument": "class",
+  "UnknownInstrument": "class",
+  "Venue": "class",
+  "audit": "() -> List[str]",
+  "by_class": "(asset_class: str) -> List[aurora.core.asset_universe.Instrument]",
+  "by_venue": "(code: str) -> List[aurora.core.asset_universe.Instrument]",
+  "contract_value": "(symbol: str, price: float) -> float",
+  "coverage": "() -> Dict[str, object]",
+  "coverage_line": "() -> str",
+  "exists": "(symbol: str) -> bool",
+  "get": "(symbol: str) -> aurora.core.asset_universe.Instrument",
+  "search": "(text: str) -> List[aurora.core.asset_universe.Instrument]",
+  "venue": "(code: str) -> aurora.core.asset_universe.Venue"
+ },
  "aurora.core.types": {
   "Candle": "class",
   "Side": "class",
