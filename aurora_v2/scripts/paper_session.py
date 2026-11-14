@@ -18,6 +18,9 @@ from aurora.portfolio.turnover import Band, apply_band, break_even_edge, turnove
 from aurora.journal import attribution
 from aurora.privacy import AuditLog, redact
 from aurora.calibration import calibrate
+from aurora.data import fetch_yahoo
+from aurora.strategies.cross_asset import (CrossAssetRules, momentum, realized_vol,
+                                           sized_weights)
 from aurora import resilience
 from aurora.data.filings import freshness, guard_no_lookahead
 from aurora.signals.factors import zscore
@@ -25,6 +28,10 @@ from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
 
 BOOK = Path("journal/paper_book.json")
+SLEEVE_FILE = Path("journal/sleeve_cross.json")
+SLEEVE_SHARE = 0.30          # frozen before the first sleeve session, not after
+CROSS_BASKET = ["SPY", "EFA", "EEM", "TLT", "IEF", "GLD", "DBC", "VNQ",
+                "BTC-USD", "GC=F", "CL=F", "ZC=F"]
 AUDIT = Path("journal/audit.jsonl")
 VALUE_W, GROWTH_W, TOP_N = 0.4, 0.2, 10     # frozen before the first paper session
 
@@ -87,6 +94,34 @@ def latest_scores(prices, filings):
     picks = sorted(blended, key=blended.get, reverse=True)[:TOP_N]
     weight = 1.0 / len(picks)
     return {s: weight for s in picks}, closes, blended, ts
+
+
+def cross_asset_sleeve():
+    """Sleeve 2: cross-asset time-series momentum. Never allowed to reach into the
+    equity book's budget: the share is fixed here, before the result is known."""
+    assets = {}
+    for sym in CROSS_BASKET:
+        try:
+            candles, _ = fetch_yahoo(sym, "1d", "20y", cache_dir="data_cache")
+            if candles:
+                assets[sym] = candles
+        except Exception:
+            continue
+    if not assets:
+        return None, "no cross-asset data available: sleeve held flat"
+    feats = {}
+    for sym, cs in assets.items():
+        closes = [c.close for c in cs]
+        m = momentum(closes)
+        v = realized_vol(closes)
+        if m is None or v is None:
+            continue
+        feats[sym] = {"momentum": m, "vol": v}
+    weights = sized_weights(feats, CrossAssetRules())
+    scaled = {k: round(v * SLEEVE_SHARE, 4) for k, v in weights.items()}
+    cash = round(SLEEVE_SHARE - sum(scaled.values()), 4)
+    return {"weights": scaled, "cash": cash, "assets": len(assets),
+            "long_names": sorted(scaled)}, None
 
 
 def main():
@@ -159,6 +194,17 @@ def main():
     if slips:
         record(log, "slippage", f"n={len(slips)} mean={sum(slips)/len(slips):+.1f}bps")
     record(log, "calibration", cal.summary())
+    sleeve, sleeve_note = cross_asset_sleeve()
+    if sleeve:
+        SLEEVE_FILE.write_text(json.dumps(sleeve, indent=2), encoding="utf-8")
+        record(log, "sleeve_cross", f"{len(sleeve['long_names'])} long of {sleeve['assets']}")
+        lines += ["", f"**سلیو بین‌دارایی ({SLEEVE_SHARE:.0%} بودجه):** "
+                      f"{len(sleeve['long_names'])} دارایی · نقد {sleeve['cash']:.1%}"]
+        for sym in sleeve["long_names"]:
+            lines.append(f"- {sym}: {sleeve['weights'][sym]:.1%}")
+    else:
+        record(log, "sleeve_cross", sleeve_note or "flat")
+        lines += ["", f"**سلیو بین‌دارایی:** {sleeve_note}"]
     record(log, "decision", f"targets={','.join(sorted(targets))} ts={ts}")
     record(log, "tickets", f"{len(tickets)} tickets")
     for name in guard_notes:
