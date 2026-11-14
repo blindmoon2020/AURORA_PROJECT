@@ -212,7 +212,7 @@ def main():
                      for p in book.positions
                      for t in [by_symbol.get(p.symbol)]
                      if p.fill_price is not None and t is not None]
-    report = fill_capture.capture(session_tickets, session_fills, already_captured=already)
+    report = fill_capture.capture(tickets, session_fills, already_captured=already)
     for m in report.matched:
         captured["records"].append({"ticket_id": m.ticket_id, "symbol": m.symbol,
                                     "bps": m.bps, "ts": m.ts})

@@ -18,6 +18,7 @@ from typing import Dict, List, Optional, Sequence
 from aurora.execution.impact import estimate
 from aurora.portfolio.risk_budget import (concentration_check, covariance_matrix,
                                           diversification_ratio, risk_contributions)
+from aurora.portfolio.scenarios import margin_of_safety, replay_all
 from aurora.portfolio.stress import (block_bootstrap, bootstrap, correlated_shock,
                                      liquidation_days)
 
@@ -44,6 +45,9 @@ class ProductReport:
     concentration_worst: Optional[float] = None
     risk_shares: Dict[str, float] = field(default_factory=dict)
     liquidation_days: Dict[str, float] = field(default_factory=dict)
+    scenarios: List[tuple] = field(default_factory=list)
+    shock_to_breach_pct: Optional[float] = None
+    limit_pct: float = 40.0
     unpriced: List[str] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
 
@@ -105,7 +109,7 @@ def build_report(equity_weights: Dict[str, float], sleeve_weights: Dict[str, flo
                  prices: Dict[str, float], equity: float,
                  candles: Dict[str, Sequence],
                  dd_limit_pct: float = 40.0) -> ProductReport:
-    rep = ProductReport(orders=list(orders))
+    rep = ProductReport(orders=list(orders), limit_pct=dd_limit_pct)
     rep.unpriced = [o.symbol for o in orders if o.total_bps is None]
 
     if sleeve_returns:
@@ -138,6 +142,13 @@ def build_report(equity_weights: Dict[str, float], sleeve_weights: Dict[str, flo
         ok, worst, shares = concentration_check(w, cov, limit=0.75)
         rep.concentration_ok, rep.concentration_worst = ok, worst
         rep.risk_shares = shares
+
+    try:
+        rep.scenarios = [(r.name, r.loss_pct, r.breaches_limit)
+                         for r in replay_all(combined, limit_pct=dd_limit_pct)]
+        rep.shock_to_breach_pct = margin_of_safety(combined, dd_limit_pct)["shock_to_breach_pct"]
+    except Exception:
+        rep.notes.append("بازپخش سناریوهای تاریخی محاسبه نشد")
 
     if rep.diversification is None:
         rep.notes.append("همبستگی و سهم ریسک سلیوها پس از بیست جلسه بازده ثبت‌شده محاسبه می‌شود")
@@ -182,6 +193,15 @@ def markdown(rep: ProductReport, calibration_note: str = "") -> str:
     if rep.concentration_ok is not None:
         verdict = "قبول" if rep.concentration_ok else "**هشدار: یک سلیو بیشتر ریسک را دارد**"
         lines.append(f"- تمرکز ریسک: بیشترین سهم {rep.concentration_worst:.0%} — {verdict}")
+    if rep.scenarios:
+        lines += ["", "## سناریوهای تاریخی روی همین سبد", "",
+                  "| بحران | اثر | حد |", "| --- | --- | --- |"]
+        for name, loss, breach in rep.scenarios:
+            lines.append(f"| {name} | {loss:+.1f}% | {'**نقض**' if breach else 'داخل حد'} |")
+        if rep.shock_to_breach_pct is not None:
+            lines.append("")
+            lines.append(f"شوک یکنواختی که حد {rep.limit_pct:.0f}٪ را می‌شکند: "
+                         f"**{rep.shock_to_breach_pct:.1f}%** افت همزمان.")
     hard = {k: v for k, v in rep.liquidation_days.items() if v != float("inf")}
     if hard:
         worst = sorted(hard.items(), key=lambda kv: kv[1], reverse=True)[:3]

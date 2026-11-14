@@ -17,7 +17,7 @@ a few hundred multiplications, and a dependency-free core is a feature the proje
 until a measurement says otherwise.
 """
 from statistics import pstdev
-from typing import Dict, Sequence
+from typing import Dict, Optional, Sequence
 
 
 def correlation(a: Sequence[float], b: Sequence[float]) -> float:
@@ -146,3 +146,44 @@ def to_crisis_weights(weights: Dict[str, float], cov: Dict[str, Dict[str, float]
     """Re-budget on the stressed covariance and compare with the calm-period budget."""
     stressed = stressed_covariance(cov, crisis_correlation)
     return equal_risk_weights(stressed)
+
+
+def shrunk_covariance(series: Dict[str, Sequence[float]],
+                      target_correlation: Optional[float] = None) -> Dict[str, Dict[str, float]]:
+    """Covariances with correlations pulled toward their average.
+
+    Estimated correlations from 24 months are mostly noise, and an ERC allocator fed noise
+    chases it: the weights move every month for no reason except sampling error. Shrinking
+    toward the average correlation is the standard cure (Ledoit-Wolf, in spirit).
+
+    The intensity here is NOT the Ledoit-Wolf optimum: it is n/(n+24), so 250 observations
+    keep 91% of the sample and 12 observations keep only 33%. Declared as a heuristic so
+    nobody mistakes it for the published estimator.
+    """
+    base = covariance_matrix(series)
+    names = list(base)
+    if len(names) < 2:
+        return base
+    obs = min(len(series[n]) for n in names)
+    if obs < 3:
+        return base
+    shrink = obs / (obs + 24.0)
+    vols = {a: base[a][a] ** 0.5 for a in names}
+    corrs = [base[a][b] / (vols[a] * vols[b])
+             for i, a in enumerate(names) for b in names[i + 1:] if vols[a] and vols[b]]
+    if not corrs:
+        return base
+    avg = sum(corrs) / len(corrs) if target_correlation is None else target_correlation
+    out: Dict[str, Dict[str, float]] = {a: {} for a in names}
+    for a in names:
+        for b in names:
+            if a == b:
+                out[a][b] = base[a][a]
+                continue
+            if not (vols[a] and vols[b]):
+                out[a][b] = 0.0
+                continue
+            sample = base[a][b] / (vols[a] * vols[b])
+            blended = shrink * sample + (1 - shrink) * avg
+            out[a][b] = vols[a] * vols[b] * blended
+    return out

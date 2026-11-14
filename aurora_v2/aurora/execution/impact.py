@@ -127,3 +127,43 @@ def slippage_vs_impact(measured_bps: float, estimated: ImpactEstimate) -> str:
         return "model held"
     return (f"model underestimated by {diff:.1f} bps"
             if diff > 0 else f"model overestimated by {-diff:.1f} bps")
+
+
+def calibrate_k(observations: Sequence[tuple], min_samples: int = 10) -> dict:
+    """Learn k from measured fills instead of trusting the textbook number.
+
+    Each observation is (participation, daily_vol_bps, measured_bps). The square-root law
+    implies measured = k * vol * sqrt(participation), so k is recoverable per fill and the
+    median is the estimate. Under `min_samples` the honest answer is "not yet": returning
+    a number from three fills would put a measured-looking constant into the cost model.
+    """
+    implied = []
+    for part, vol, measured in observations:
+        if part and part > 0 and vol and vol > 0:
+            implied.append(measured / (vol * (part ** 0.5)))
+    if len(implied) < min_samples:
+        return {"k": None, "samples": len(implied), "min_samples": min_samples,
+                "verdict": f"insufficient evidence ({len(implied)}/{min_samples} fills): k=10 assumption kept"}
+    implied.sort()
+    mid = implied[len(implied) // 2]
+    spread = implied[int(0.9 * (len(implied) - 1))] - implied[int(0.1 * (len(implied) - 1))]
+    return {"k": mid, "samples": len(implied), "min_samples": min_samples,
+            "dispersion": spread,
+            "verdict": (f"implied k={mid:.1f} (p10-p90 spread {spread:.1f}); "
+                        "adopt only if the spread is narrower than the assumption it replaces")}
+
+
+def sliced_cost_money(notional: float, adv_notional: Optional[float], daily_vol_bps: float,
+                      half_spread_bps: float = 0.5, k: float = DEFAULT_K,
+                      cap: float = DEFAULT_PARTICIPATION_CAP) -> Optional[float]:
+    """Total currency cost of a sliced plan, weighted by notional - not an average.
+
+    Averaging the child costs understates a plan because each child pays its own impact on
+    its own size; the sum is what leaves the account, so the sum is what gets reported.
+    """
+    plan = split_order(notional, adv_notional, daily_vol_bps, half_spread_bps, k, cap)
+    if plan["slices"] == 0:
+        return None
+    child = abs(notional) / plan["slices"]
+    child_bps = estimate(child, adv_notional, daily_vol_bps, half_spread_bps, k, cap).total_bps
+    return abs(notional) * child_bps / 10000.0
