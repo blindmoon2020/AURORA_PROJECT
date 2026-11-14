@@ -55,13 +55,27 @@ def redact(text: str) -> str:
         return text
     out = _EMAIL.sub(_MASK, str(text))
     out = _PHONE.sub(_MASK, out)
-    out = _NATIONAL_ID.sub(_MASK, out)
+    out = _NATIONAL_ID.sub(lambda m: _MASK if iran_national_id_valid(m.group(0)) else m.group(0), out)
 
     def _maybe_card(m: re.Match) -> str:
         digits = "".join(ch for ch in m.group(0) if ch.isdigit())
         return _MASK if luhn(digits) else m.group(0)
 
     return _LONG_NUMBER.sub(_maybe_card, out)
+
+
+def iran_national_id_valid(code: str) -> bool:
+    """The official 10-digit checksum. Without it, any 10-digit number (a unix
+    timestamp included) gets masked and the audit trail loses its most useful field."""
+    digits = [c for c in str(code) if c.isdigit()]
+    if len(digits) != 10:
+        return False
+    if len(set(digits)) == 1:
+        return False
+    total = sum(int(digits[i]) * (10 - i) for i in range(9))
+    remainder = total % 11
+    check = int(digits[9])
+    return check == remainder if remainder < 2 else check == 11 - remainder
 
 
 def _key() -> bytes:

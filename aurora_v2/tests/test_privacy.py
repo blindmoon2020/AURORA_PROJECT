@@ -19,6 +19,12 @@ class RedactTests(unittest.TestCase):
         self.assertFalse(luhn("7620.50"))
         self.assertTrue(luhn("4111111111111111"))
 
+    def test_a_unix_timestamp_is_not_a_national_id(self):
+        self.assertEqual(redact("ts=1794493800"), "ts=1794493800")
+
+    def test_a_real_national_id_is_masked(self):
+        self.assertEqual(redact("id 0499370899 ok"), "id *** ok")
+
     def test_prices_and_dates_survive(self):
         text = "AAPL closed at 355.63 on 2026-11-13"
         self.assertEqual(redact(text), text)

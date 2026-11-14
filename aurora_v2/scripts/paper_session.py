@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.privacy import AuditLog, redact
+from aurora.calibration import calibrate
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
@@ -108,10 +109,17 @@ def main():
         lines_txt = "\n".join(t.line() for t in tickets)
         Path("journal/tickets.txt").write_text(lines_txt + "\n", encoding="utf-8")
         lines += ["", f"تیکت‌های آماده اجرا: {len(tickets)} در journal/tickets.txt"]
+    # realized slippage feeds the cost assumption: the loop closes here, not in prose
+    slips = list(book.slippage_bps)
+    cal = calibrate(slips, assumption_bps=10.0)
+    if slips:
+        record(log, "slippage", f"n={len(slips)} mean={sum(slips)/len(slips):+.1f}bps")
+    record(log, "calibration", cal.summary())
     record(log, "decision", f"targets={','.join(sorted(targets))} ts={ts}")
     record(log, "tickets", f"{len(tickets)} tickets")
     for name in guard_notes:
         record(log, "guard", name)
+    lines += ["", f"**کالیبراسیون هزینه:** {cal.summary()}"]
     if book.slippage_bps:
         avg = sum(book.slippage_bps) / len(book.slippage_bps)
         lines += ["", f"لغزش اندازه‌گیری‌شده: میانگین {avg:+.2f} bps روی {len(book.slippage_bps)} سفارش"]
