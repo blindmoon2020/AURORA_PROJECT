@@ -11,7 +11,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from aurora.execution import paper_book
+from aurora.execution import manual_bridge, paper_book
+from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.signals.factors import zscore
 from aurora.signals.macro import point_in_time
 import v2_walkforward as wf
@@ -59,9 +60,15 @@ def latest_scores(prices, filings):
 
 def main():
     prices, filings = wf.load()
-    targets, closes, blended, ts = latest_scores(prices, filings)
+    raw_targets, closes, blended, ts = latest_scores(prices, filings)
     book = paper_book.load(BOOK) or paper_book.PaperBook(started=str(ts))
     filled = paper_book.apply_fills(book, prices)
+
+    # the risk budget is applied to the *raw* ranking, before anything becomes a
+    # position: an allowed target is what the book may hold, not what it wanted
+    equity_before = paper_book.mark_to_market(book, closes)
+    guard = apply_limits(raw_targets, GuardLimits())
+    targets, guard_notes = guard.allowed, guard.notes
     changed = paper_book.rebalance(book, targets, closes)
     equity = paper_book.mark_to_market(book, closes)
     paper_book.save(book, BOOK)
@@ -73,6 +80,14 @@ def main():
              f"- پر شد: {len(filled)} سفارش", "", "| نماد | وزن | امتیاز |", "| --- | --- | --- |"]
     for sym in targets:
         lines.append(f"| {sym} | {targets[sym]:.2f} | {blended[sym]:+.2f} |")
+    if guard_notes:
+        lines += ["", "**حفاظ ریسک:**"] + [f"- {n}" for n in guard_notes]
+    tickets = manual_bridge.tickets_for_targets(
+        targets, {k: v[1] for k, v in closes.items()}, equity, str(ts), ts)
+    if tickets:
+        lines_txt = "\n".join(t.line() for t in tickets)
+        Path("journal/tickets.txt").write_text(lines_txt + "\n", encoding="utf-8")
+        lines += ["", f"تیکت‌های آماده اجرا: {len(tickets)} در journal/tickets.txt"]
     if book.slippage_bps:
         avg = sum(book.slippage_bps) / len(book.slippage_bps)
         lines += ["", f"لغزش اندازه‌گیری‌شده: میانگین {avg:+.2f} bps روی {len(book.slippage_bps)} سفارش"]
