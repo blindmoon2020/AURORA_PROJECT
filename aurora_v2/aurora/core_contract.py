@@ -24,6 +24,7 @@ CORE_MODULES: Tuple[str, ...] = (
     "aurora.core.types",
     "aurora.core.asset_universe",
     "aurora.core.market_registry",
+    "aurora.core.access_registry",
     "aurora.execution.paper_book",
     "aurora.execution.manual_bridge",
     "aurora.execution.fill_capture",

@@ -5,6 +5,18 @@
   "measure": "(fills: Iterable[tuple]) -> List[float]",
   "slippage_bps": "(decision_price: float, fill_price: float, is_buy: bool = True) -> float"
  },
+ "aurora.core.access_registry": {
+  "AccessPath": "class",
+  "UnknownAccessPath": "class",
+  "audit": "() -> List[str]",
+  "by_key": "(key: str) -> aurora.core.access_registry.AccessPath",
+  "by_kind": "(kind: str) -> List[aurora.core.access_registry.AccessPath]",
+  "counts": "() -> Dict[str, int]",
+  "free_paths": "() -> List[aurora.core.access_registry.AccessPath]",
+  "markdown": "() -> str",
+  "summary_line": "() -> str",
+  "unverified": "() -> List[str]"
+ },
  "aurora.core.asset_universe": {
   "Instrument": "class",
   "UnknownInstrument": "class",
