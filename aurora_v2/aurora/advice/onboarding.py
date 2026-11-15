@@ -262,3 +262,42 @@ def onboarding_report(profile: Profile, allocation: Dict[str, float], capital: f
         lines += ["", "سبد فعلی داخل باند است؛ تغییری لازم نیست (کنترل هزینه)"]
     lines += ["", "---", DISCLAIMER]
     return "\n".join(lines)
+
+
+CONTRADICTION_RULES = (
+    ("tolerance_exceeds_capacity",
+     "تحمل ریسک اعلام‌شده از ظرفیت مالی بیشتر است: پاسخ‌ها هیجانی‌اند نه محاسبه‌شده"),
+    ("short_horizon_aggressive",
+     "افق کوتاه با پروفایل تهاجمی جمع نمی‌شود؛ ریسک در زمان کوتاه فرصت بازگشت ندارد"),
+    ("no_buffer_high_risk",
+     "بدون ذخیره اضطراری، ریسک بالا یعنی فروش اجباری در بدترین قیمت"),
+    ("loss_claim_above_cap",
+     "افت اعلام‌شده قابل تحمل، از سقف محاسبه‌شده پروفایل بیشتر است"),
+)
+
+
+def contradictions(answers: Dict[int, int], capacity: Dict[str, object],
+                   profile: Optional[Profile] = None) -> List[str]:
+    """Flags where a client's stated appetite and stated situation disagree.
+
+    This is the one idea worth taking from the external project: a questionnaire can be
+    answered consistently in total and still be internally inconsistent. Taking the lower of
+    the two is the only safe resolution, and the client is told why.
+    """
+    prof = profile or score_answers(answers)
+    flags: List[str] = []
+    horizon = int(capacity.get("horizon_years", 0) or 0)
+    buffer_months = float(capacity.get("emergency_fund_months", 0) or 0)
+    claimed_loss = float(capacity.get("loss_tolerance_pct", 0) or 0)
+    capacity_score = prof.capacity_score
+    tolerance_score = prof.tolerance_score
+
+    if tolerance_score - capacity_score >= 20:
+        flags.append(CONTRADICTION_RULES[0][1])
+    if horizon and horizon < 3 and prof.band in ("تهاجمی", "رشدگرا"):
+        flags.append(CONTRADICTION_RULES[1][1])
+    if buffer_months < 3 and prof.band in ("تهاجمی", "رشدگرا"):
+        flags.append(CONTRADICTION_RULES[2][1])
+    if claimed_loss > prof.max_drawdown_pct + 1e-9:
+        flags.append(CONTRADICTION_RULES[3][1])
+    return flags
