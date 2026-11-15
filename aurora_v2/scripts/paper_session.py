@@ -317,6 +317,28 @@ def main():
         advisory_text += "\n## توقف ریسک تازه\n\n" + "".join(f"- {n}\n" for n in guard_notes_gate)
     Path("journal/advisory.md").write_text(advisory_text, encoding="utf-8")
     record(log, "advisory", proposal.summary())
+
+    # the combined view is where technical and fundamental meet in one verdict
+    from aurora.analysis import combine as cb
+    from aurora.core import asset_universe as au
+    views = []
+    for rec in proposal.recommendations[:8]:
+        bars = prices.get(rec.symbol) or []
+        if len(bars) < 60:
+            continue
+        try:
+            cls = au.get(rec.symbol).asset_class
+        except Exception:
+            cls = "equity"
+        try:
+            views.append(cb.combine(rec.symbol, cls, bars))
+        except Exception as exc:
+            record(log, "combined_skipped", "%s: %s" % (rec.symbol, type(exc).__name__))
+    if views:
+        parts = [cb.explain(v) for v in views]
+        Path("journal/analysis_combined.md").write_text(
+            "# تحلیل ترکیبی تکنیکال و بنیادی\n\n" + "\n\n".join(parts), encoding="utf-8")
+        record(log, "combined", str(len(views)) + " symbols")
     record(log, "overlay", overlay.summary())
     record(log, "product_report",
            f"orders={len(orders)} refused={len(rep.refused)} unpriced={len(rep.unpriced)}")
