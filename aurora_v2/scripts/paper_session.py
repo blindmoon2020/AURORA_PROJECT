@@ -13,12 +13,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from aurora.core import asset_universe
 from aurora.execution import manual_bridge, paper_book
 from aurora.portfolio.guard import GuardLimits, apply_limits
 from aurora.portfolio.overlay import trend_brake, vol_target
 from aurora.portfolio.brakes import apply_overlay, decide as overlay_decide
 from aurora.advisory.recommender import explain as explain_proposal
 from aurora.advisory.recommender import recommend
+from aurora.analysis.combine import combine as combine_view   # combine import
+from aurora.analysis.combine import explain as explain_view
 from aurora.analysis.advanced_ta import technical_read
 from aurora.data.news_calendar import event_risk_gate, load_calendar
 from aurora.execution.live_router import route_book, route_report
